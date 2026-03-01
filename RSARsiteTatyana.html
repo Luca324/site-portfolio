@@ -45,6 +45,16 @@
       font-weight: 400;
     }
 
+    .profile-photo {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 0 auto 20px;
+      display: block;
+      border: 3px solid #e0e0e0;
+    }
+
     section {
       margin-bottom: 50px;
     }
@@ -103,6 +113,21 @@
 
     .project-description a:hover {
       text-decoration: underline;
+    }
+
+    .project-image {
+      width: 100%;
+      max-width: 800px;
+      height: auto;
+      margin-top: 20px;
+      border-radius: 6px;
+      border: 1px solid #e0e0e0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      display: block;
+    }
+
+    .project-image-wrapper {
+      margin-top: 15px;
     }
 
     .contacts {
@@ -168,13 +193,18 @@
       .project-title {
         font-size: 18px;
       }
+
+      .profile-photo {
+        width: 120px;
+        height: 120px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
-      me.jfif
+      <img src="me.jfif" alt="Татьяна Мосолова" class="profile-photo">
       <h1>Татьяна Мосолова</h1>
       <p class="subtitle">Frontend Developer</p>
     </header>
@@ -190,7 +220,9 @@
             Сайт норвежского интернет-магазина компьютеров и комплектующих. 
             <a href="https://buildmeister.no" target="_blank">Посмотреть сайт</a>
           </div>
-          buildmeister.png
+          <div class="project-image-wrapper">
+            <img src="buildmeister.png" alt="BuildMeister" class="project-image">
+          </div>
         </li>
 
         <li class="project-item">
@@ -200,7 +232,9 @@
           <div class="project-description">
             Платформа для анкетирования.
           </div>
-          https://private-user-images.githubusercontent.com/161855141/556635748-62d1d7ac-f99d-489a-b3e6-328ba464284e.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NzI0MDQ0MDksIm5iZiI6MTc3MjQwNDEwOSwicGF0aCI6Ii8xNjE4NTUxNDEvNTU2NjM1NzQ4LTYyZDFkN2FjLWY5OWQtNDg5YS1iM2U2LTMyOGJhNDY0Mjg0ZS5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjYwMzAxJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI2MDMwMVQyMjI4MjlaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1lNzcxOWJiMTE2YWEyNTE5ZDkwZTA1MDVhOTE5NmIzNzRkNGE1ZTBlMDBiODQzNDA3NDVhNDM1YTVhZjg4NDliJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.UhYoUN8jAfUFXR1IZ2tT7Rm9GASlmpq1EdeBsCO-_F0
+          <div class="project-image-wrapper">
+            <img src="https://private-user-images.githubusercontent.com/161855141/556635748-62d1d7ac-f99d-489a-b3e6-328ba464284e.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NzI0MDQ0MDksIm5iZiI6MTc3MjQwNDEwOSwicGF0aCI6Ii8xNjE4NTUxNDEvNTU2NjM1NzQ4LTYyZDFkN2FjLWY5OWQtNDg5YS1iM2U2LTMyOGJhNDY0Mjg0ZS5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjYwMzAxJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI2MDMwMVQyMjI4MjlaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1lNzcxOWJiMTE2YWEyNTE5ZDkwZTA1MDVhOTE5NmIzNzRkNGE1ZTBlMDBiODQzNDA3NDVhNDM1YTVhZjg4NDliJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.UhYoUN8jAfUFXR1IZ2tT7Rm9GASlmpq1EdeBsCO-_F0" alt="Pollster" class="project-image">
+          </div>
         </li>
 
         <li class="project-item">
@@ -219,7 +253,9 @@
           <div class="project-description">
             Сервис для генерации и аналитики CSV с использованием JS потоков.
           </div>
-          https://private-user-images.githubusercontent.com/161855141/556636942-387ae372-bc45-4d0b-be3e-0ead5e0fdaf3.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NzI0MDQ0NzUsIm5iZiI6MTc3MjQwNDE3NSwicGF0aCI6Ii8xNjE4NTUxNDEvNTU2NjM2OTQyLTM4N2FlMzcyLWJjNDUtNGQwYi1iZTNlLTBlYWQ1ZTBmZGFmMy5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjYwMzAxJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI2MDMwMVQyMjI5MzVaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1iOWMyNjUxZjIzMzRkZDExNzgyYTQ2NWUyYTkzOWZjZjY0ODNhYmI0MGFmMDNlZGRhOTNkNjY3ODM2MGIxNGU2JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9._tJWH0Yk9eOX_WieqUputdf1vQeXCq77mISXA2E98EI
+          <div class="project-image-wrapper">
+            <img src="https://private-user-images.githubusercontent.com/161855141/556636942-387ae372-bc45-4d0b-be3e-0ead5e0fdaf3.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NzI0MDQ0NzUsIm5iZiI6MTc3MjQwNDE3NSwicGF0aCI6Ii8xNjE4NTUxNDEvNTU2NjM2OTQyLTM4N2FlMzcyLWJjNDUtNGQwYi1iZTNlLTBlYWQ1ZTBmZGFmMy5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjYwMzAxJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI2MDMwMVQyMjI5MzVaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1iOWMyNjUxZjIzMzRkZDExNzgyYTQ2NWUyYTkzOWZjZjY0ODNhYmI0MGFmMDNlZGRhOTNkNjY3ODM2MGIxNGU2JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9._tJWH0Yk9eOX_WieqUputdf1vQeXCq77mISXA2E98EI" alt="Analytics-service" class="project-image">
+          </div>
         </li>
 
         <li class="project-item">
@@ -230,7 +266,9 @@
             Сайт-калькулятор, который рассчитывает электрические токи по методам МУН и МН. 
             <a href="https://tatyana.rsars.ru/calculator/index.html" target="_blank">Посмотреть сайт</a>
           </div>
-          mynmn.png
+          <div class="project-image-wrapper">
+            <img src="mynmn.png" alt="MYN-MN-calculation" class="project-image">
+          </div>
         </li>
 
         <li class="project-item">
@@ -241,7 +279,9 @@
             Сайт, который решает задачки по физике. 
             <a href="https://tatyana.rsars.ru/physics/index.html" target="_blank">Посмотреть сайт</a>
           </div>
-          physics.png
+          <div class="project-image-wrapper">
+            <img src="physics.png" alt="PhysicsSiteCalculator" class="project-image">
+          </div>
         </li>
 
         <li class="project-item">
@@ -251,7 +291,9 @@
           <div class="project-description">
             Мобильное приложение для планирования на React Native.
           </div>
-          https://private-user-images.githubusercontent.com/161855141/556631598-583fb823-be10-419f-b827-62737d442eb4.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NzI0MDQzNDcsIm5iZiI6MTc3MjQwNDA0NywicGF0aCI6Ii8xNjE4NTUxNDEvNTU2NjMxNTk4LTU4M2ZiODIzLWJlMTAtNDE5Zi1iODI3LTYyNzM3ZDQ0MmViNC5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjYwMzAxJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI2MDMwMVQyMjI3MjdaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT04OGMwNWExNGNhM2ZhMTg2NjRiNTFmZjcyNjc1MzI5YjBmYjRlNjkyNDhlMDM1OTcxOTQ0NDIzNzViODBhOTU3JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.7M7OWCTQ5ActID_hcquQvdhcvmchI_TVj1rCNCWb-CU
+          <div class="project-image-wrapper">
+            <img src="https://private-user-images.githubusercontent.com/161855141/556631598-583fb823-be10-419f-b827-62737d442eb4.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NzI0MDQzNDcsIm5iZiI6MTc3MjQwNDA0NywicGF0aCI6Ii8xNjE4NTUxNDEvNTU2NjMxNTk4LTU4M2ZiODIzLWJlMTAtNDE5Zi1iODI3LTYyNzM3ZDQ0MmViNC5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjYwMzAxJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI2MDMwMVQyMjI3MjdaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT04OGMwNWExNGNhM2ZhMTg2NjRiNTFmZjcyNjc1MzI5YjBmYjRlNjkyNDhlMDM1OTcxOTQ0NDIzNzViODBhOTU3JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.7M7OWCTQ5ActID_hcquQvdhcvmchI_TVj1rCNCWb-CU" alt="Plan It" class="project-image">
+          </div>
         </li>
 
         <li class="project-item">
