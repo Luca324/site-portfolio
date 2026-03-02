@@ -27,9 +27,7 @@
 
     header {
       text-align: center;
-      margin-bottom: 60px;
       padding-bottom: 30px;
-      border-bottom: 2px solid #e0e0e0;
     }
 
     h1 {
@@ -130,6 +128,29 @@
       margin-top: 15px;
     }
 
+    .projects-filter {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .projects-filter select {
+      padding: 6px 10px;
+      border-radius: 4px;
+      border: 1px solid #d0d0d0;
+      background-color: #ffffff;
+      font-size: 14px;
+    }
+
+    .project-date {
+      margin-top: 6px;
+      font-size: 14px;
+      color: #777;
+    }
+
     .contacts {
       display: flex;
       flex-wrap: wrap;
@@ -208,7 +229,6 @@
       <h1>Татьяна Мосолова</h1>
       <p class="subtitle">Frontend Developer</p>
     </header>
-
     <section>
       <h2>Контакты</h2>
       <div class="contacts">
@@ -227,8 +247,16 @@
 
     <section>
       <h2>Проекты</h2>
+      <div class="projects-filter">
+        <span>Сортировать проекты:</span>
+        <select id="project-sort">
+          <option value="default">В порядке по умолчанию</option>
+          <option value="newest">Сначала новые</option>
+          <option value="oldest">Сначала старые</option>
+        </select>
+      </div>
       <ul class="projects-list">
-        <li class="project-item">
+        <li class="project-item" data-project-id="buildmeister">
           <div class="project-title">
             <a href="https://github.com/Luca324/BuildMeister" target="_blank">BuildMeister</a>
           </div>
@@ -241,7 +269,21 @@
           </div>
         </li>
 
-        <li class="project-item">
+        <ul class="projects-list">
+        <li class="project-item" data-project-id="smartstorage">
+          <div class="project-title">
+            <a href="https://github.com/Luca324/SmartStorage/" target="_blank">SmartStorage</a>
+          </div>
+          <div class="project-description">
+            Кейс-чемпионат «Расти в IT!». Кейс от Ростелеком: Умный склад - система управления складской логистикой с использованием автономных роботов.
+            <a href="https://disk.yandex.ru/i/un1vq04TcxQJpA" target="_blank">Посмотреть демо</a>
+          </div>
+          <div class="project-image-wrapper">
+            <img src="smartstorage.png" alt="smartstorage" class="project-image">
+          </div>
+        </li>
+
+        <li class="project-item" data-project-id="myn-mn-calculation">
           <div class="project-title">
             <a href="https://github.com/Luca324/MYN-MN-calculation" target="_blank">MYN-MN-calculation</a>
           </div>
@@ -254,7 +296,7 @@
           </div>
         </li>
 
-        <li class="project-item">
+        <li class="project-item" data-project-id="physics-site-calculator">
           <div class="project-title">
             <a href="https://github.com/Luca324/PhysicsSiteCalculator" target="_blank">PhysicsSiteCalculator</a>
           </div>
@@ -267,7 +309,7 @@
           </div>
         </li>
 
-        <li class="project-item">
+        <li class="project-item" data-project-id="plan-it">
           <div class="project-title">
             <a href="https://github.com/Luca324/PlanIt" target="_blank">Plan It</a>
           </div>
@@ -279,7 +321,7 @@
           </div>
         </li>
         
-        <li class="project-item">
+        <li class="project-item" data-project-id="analytics-service">
           <div class="project-title">
             <a href="https://github.com/Luca324/Analytics-service" target="_blank">Analytics-service</a>
           </div>
@@ -291,7 +333,7 @@
           </div>
         </li>
 
-        <li class="project-item">
+        <li class="project-item" data-project-id="pollster">
           <div class="project-title">
             <a href="https://github.com/Luca324/pollster" target="_blank">Pollster</a>
           </div>
@@ -303,7 +345,7 @@
           </div>
         </li>
 
-        <li class="project-item">
+        <li class="project-item" data-project-id="flocky">
           <div class="project-title">
             <a href="https://github.com/Luca324/FLocky" target="_blank">FLocky</a>
           </div>
@@ -312,7 +354,7 @@
           </div>
         </li>
 
-        <li class="project-item">
+        <li class="project-item" data-project-id="shri-infra-homework-2025">
           <div class="project-title">
             <a href="https://github.com/Luca324/shri-infra-homework-2025" target="_blank">shri-infra-homework-2025</a>
           </div>
@@ -328,5 +370,116 @@
       <p>Хостинг предоставлен <a href="https://rsars.ru/" target="_blank" style="color: #2563eb; text-decoration: none;">rsars.ru</a></p>
     </footer>
   </div>
+
+  <script>
+    (function () {
+      // Здесь можно задать человекочитаемую дату и порядок для сортировки.
+      // Чем больше order, тем проект новее.
+      const projectsMeta = {
+        'buildmeister': {
+          date: 'Октябрь 2025 - Февраль 2026', // Например: 'Октябрь 2025 — Декабрь 2025'
+          order: 100
+        },
+        'smartstorage': {
+          date: 'Октябрь 2025',
+          order: 95
+        },
+        'myn-mn-calculation': {
+          date: 'Декабрь 2024',
+          order: 20
+        },
+        'physics-site-calculator': {
+          date: 'Май 2024',
+          order: 10
+        },
+        'plan-it': {
+          date: 'Сентябрь 2025',
+          order: 90
+        },
+        'analytics-service': {
+          date: 'Июль 2025',
+          order: 70
+        },
+        'pollster': {
+          date: 'Январь 2025 - Май 2025',
+          order: 50
+        },
+        'flocky': {
+          date: 'Июнь 2025',
+          order: 60
+        },
+        'shri-infra-homework-2025': {
+          date: 'Июль 2025',
+          order: 80
+        }
+      };
+
+      const list = document.querySelector('.projects-list');
+      const sortSelect = document.getElementById('project-sort');
+
+      if (!list || !sortSelect) {
+        return;
+      }
+
+      const items = Array.from(list.querySelectorAll('.project-item')).map(function (element, index) {
+        const id = element.getAttribute('data-project-id') || '';
+        const meta = projectsMeta[id];
+
+        // Если нужно показать дату под проектом — впиши её в объект выше.
+        if (meta && meta.date) {
+          let dateEl = element.querySelector('.project-date');
+          if (!dateEl) {
+            dateEl = document.createElement('div');
+            dateEl.className = 'project-date';
+            const desc = element.querySelector('.project-description');
+            if (desc && desc.parentNode) {
+              desc.parentNode.insertBefore(dateEl, desc.nextSibling);
+            } else {
+              element.appendChild(dateEl);
+            }
+          }
+          dateEl.textContent = meta.date;
+        }
+
+        return {
+          element: element,
+          id: id,
+          originalIndex: index
+        };
+      });
+
+      sortSelect.addEventListener('change', function () {
+        const value = sortSelect.value;
+        const sorted = items.slice();
+
+        if (value === 'default') {
+          sorted.sort(function (a, b) {
+            return a.originalIndex - b.originalIndex;
+          });
+        } else {
+          sorted.sort(function (a, b) {
+            const metaA = projectsMeta[a.id] || {};
+            const metaB = projectsMeta[b.id] || {};
+            const orderA = typeof metaA.order === 'number' ? metaA.order : 0;
+            const orderB = typeof metaB.order === 'number' ? metaB.order : 0;
+
+            if (value === 'newest') {
+              return orderB - orderA;
+            }
+
+            if (value === 'oldest') {
+              return orderA - orderB;
+            }
+
+            return 0;
+          });
+        }
+
+        sorted.forEach(function (item) {
+          list.appendChild(item.element);
+        });
+      });
+    })();
+  </script>
 </body>
 </html>
