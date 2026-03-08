@@ -126,10 +126,12 @@
       const roomHeight = header.getBoundingClientRect().height;
       const roomDepth = 250;
       
-      // Материал для стен
+      // Материал для стен - темный и полупрозрачный
       const wallMaterial = new THREE.MeshStandardMaterial({
         color: 0xf5f5f5,
-        side: THREE.DoubleSide
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.9
       });
       
       // Пол
@@ -174,7 +176,7 @@
       camera.position.set(0, 0, 200);
       camera.lookAt(0, 0, 0);
       
-      // Включаем тени
+      // Включаем тени с мягким размытием
       renderer.shadowMap.enabled = true;
       renderer.shadowMap.type = THREE.PCFSoftShadowMap;
       
@@ -190,6 +192,7 @@
       cursorLight.shadow.mapSize.height = 2048;
       cursorLight.shadow.camera.near = 0.1;
       cursorLight.shadow.camera.far = 500;
+      cursorLight.shadow.radius = 8; // Радиус размытия тени (больше = более размытая)
       cursorLight.distance = 1000;
       cursorLight.decay = 0;
       scene.add(cursorLight);
