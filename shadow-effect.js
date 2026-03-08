@@ -185,7 +185,8 @@
       scene.add(ambientLight);
       
       // PointLight, следующий за курсором - ближе к объектам (на 2/3 пути от камеры)
-      const cursorLight = new THREE.PointLight(0xffffff, 3);
+      // Цвет света соответствует цвету ссылок заголовков (#2563eb)
+      const cursorLight = new THREE.PointLight(0x2563eb, 3);
       cursorLight.position.set(0, 0, 0); // Ближе к объектам (z=-125), камера на z=200
       cursorLight.castShadow = true;
       cursorLight.shadow.mapSize.width = 2048;
