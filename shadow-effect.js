@@ -103,7 +103,7 @@
       });
       
       renderer.setPixelRatio(window.devicePixelRatio);
-      renderer.setClearColor(0x000000, 0); // Прозрачный фон
+      renderer.setClearColor(0x000000, 10); // Прозрачный фон
       
       // Обновление размеров
       function updateSize() {
@@ -124,19 +124,57 @@
       // Размеры комнаты
       const roomWidth = header.getBoundingClientRect().width;
       const roomHeight = header.getBoundingClientRect().height;
-      const roomDepth = 250;
+      const roomDepth = 50;
       
       // Материал для стен - темный и полупрозрачный
       const wallMaterial = new THREE.MeshStandardMaterial({
-        color: 0xf5f5f5,
-        side: THREE.DoubleSide,
+        color: 0xffffff,
         transparent: true,
-        opacity: 0.6
+        opacity: 0.3,
+        roughness: 0.8,        // шероховатость дает матовый эффект
+        metalness: 0
+    });
+
+    const specialMaterial1 = new THREE.MeshStandardMaterial({
+      color: 0xff88aa,      // розовый оттенок
+      transparent: true,
+      opacity: 0.8,
+      emissive: 0x331122    // легкое свечение
+  });
+  const specialMaterial2 = new THREE.MeshStandardMaterial({
+    color: 0x4488fa,      // синий
+    transparent: true,
+    opacity: 0.8,
+    emissive: 0x331122    // легкое свечение
+});
+  const specialMaterial3 = new THREE.MeshStandardMaterial({
+    color: 0x44cc88,      // зелёный/бирюзовый
+    transparent: true,
+    opacity: 0.8,
+    emissive: 0x112233
+});
+      
+      // Рендер-таргет для зеркала (задняя стена)
+      const mirrorRenderTarget = new THREE.WebGLRenderTarget(512, 512, {
+        minFilter: THREE.LinearFilter,
+        magFilter: THREE.LinearFilter,
+        format: THREE.RGBAFormat,
+        stencilBuffer: false
+      });
+      mirrorRenderTarget.texture.flipY = true;
+      const mirrorCamera = camera.clone();
+      
+      // Материал зеркала
+      const mirrorMaterial = new THREE.MeshBasicMaterial({
+        map: mirrorRenderTarget.texture,
+        transparent: true,
+        opacity: 0.95,
+        side: THREE.DoubleSide
       });
       
       // Пол
       const floorGeometry = new THREE.PlaneGeometry(roomWidth, roomDepth);
-      const floor = new THREE.Mesh(floorGeometry, wallMaterial);
+      const floor = new THREE.Mesh(floorGeometry, specialMaterial1);
       floor.rotation.x = -Math.PI / 2;
       floor.position.y = -roomHeight / 2;
       floor.position.z = -roomDepth / 2;
@@ -152,26 +190,35 @@
       
       // Левая стена
       const leftWallGeometry = new THREE.PlaneGeometry(roomDepth, roomHeight);
-      const leftWall = new THREE.Mesh(leftWallGeometry, wallMaterial);
+      const leftWall = new THREE.Mesh(leftWallGeometry, specialMaterial2);
       leftWall.rotation.y = Math.PI / 2;
       leftWall.position.x = -roomWidth / 2;
       leftWall.position.z = -roomDepth / 2;
       scene.add(leftWall);
       
-      // Правая стена
+      // Правая стена — цветная (бирюзовая)
       const rightWallGeometry = new THREE.PlaneGeometry(roomDepth, roomHeight);
-      const rightWall = new THREE.Mesh(rightWallGeometry, wallMaterial);
+      const rightWall = new THREE.Mesh(rightWallGeometry, specialMaterial3);
       rightWall.rotation.y = -Math.PI / 2;
       rightWall.position.x = roomWidth / 2;
       rightWall.position.z = -roomDepth / 2;
       scene.add(rightWall);
       
-      // Задняя стена
+      // Задняя стена — зеркало (отражает сцену)
       const backWallGeometry = new THREE.PlaneGeometry(roomWidth, roomHeight);
-      const backWall = new THREE.Mesh(backWallGeometry, wallMaterial);
+      const backWall = new THREE.Mesh(backWallGeometry, mirrorMaterial);
       backWall.position.z = -roomDepth;
+      backWall.visible = true;
       scene.add(backWall);
       
+      // Передняя стена — за камерой (z > 200), смотрит в сторону комнаты
+      const frontWallGeometry = new THREE.PlaneGeometry(roomWidth, roomHeight);
+      const frontWall = new THREE.Mesh(frontWallGeometry, specialMaterial3);
+      frontWall.position.z = 250;   // за камерой (камера на z=200)
+      frontWall.rotation.y = Math.PI; // грань смотрит в сторону -Z (к камере и комнате)
+      frontWall.receiveShadow = true;
+      scene.add(frontWall);
+            
       // Настройка камеры
       camera.position.set(0, 0, 200);
       camera.lookAt(0, 0, 0);
@@ -186,7 +233,7 @@
       
       // PointLight, следующий за курсором - ближе к объектам (на 2/3 пути от камеры)
       // Цвет света соответствует цвету ссылок заголовков (#2563eb)
-      const cursorLight = new THREE.PointLight(0x2563eb, 10);
+      const cursorLight = new THREE.PointLight(0xffffff, 10);
       cursorLight.position.set(0, 0, 200); // Ближе к объектам (z=-125), камера на z=200
       cursorLight.castShadow = true;
       cursorLight.shadow.mapSize.width = 2048;
@@ -298,6 +345,21 @@
         requestAnimationFrame(animate);
         sync3DObjectsWithHTML();
         updateLightPosition();
+        
+        // Зеркало: рендер сцены с отражённой камеры в текстуру
+        mirrorCamera.position.x = camera.position.x;
+        mirrorCamera.position.y = camera.position.y;
+        mirrorCamera.position.z = -2 * roomDepth - camera.position.z;
+        mirrorCamera.lookAt(0, 0, -2 * roomDepth);
+        mirrorCamera.updateMatrixWorld(true);
+        
+        backWall.visible = false;
+        renderer.setRenderTarget(mirrorRenderTarget);
+        renderer.clear();
+        renderer.render(scene, mirrorCamera);
+        renderer.setRenderTarget(null);
+        backWall.visible = true;
+        
         renderer.render(scene, camera);
       }
       
@@ -319,3 +381,46 @@
   }
 
 })();
+
+
+    //  // Пол: сначала создаём с обычным материалом (чтобы не было чёрного экрана),
+    //   // потом при успешной загрузке текстур меняем на траву
+    //   const floorGeometry = new THREE.PlaneGeometry(roomWidth, roomDepth);
+    //   const floor = new THREE.Mesh(floorGeometry, wallMaterial);
+    //   floor.rotation.x = -Math.PI / 2;
+    //   floor.position.y = -roomHeight / 2;
+    //   floor.position.z = -roomDepth / 2;
+    //   floor.receiveShadow = true;
+    //   scene.add(floor);
+
+    //   // Текстуры травы (путь относительно страницы — файлы должны быть рядом с index.html)
+    //   const loader = new THREE.TextureLoader();
+    //   const grassUrls = {
+    //     color: 'Grass005_1K-JPG_Color.jpg',
+    //     normal: 'Grass005_1K-JPG_NormalGL.jpg',
+    //     roughness: 'Grass005_1K-JPG_Roughness.jpg'
+    //   };
+    //   var loaded = { color: false, normal: false, roughness: false };
+
+    //   function tryApplyGrass() {
+    //     if (!loaded.color || !loaded.normal || !loaded.roughness) return;
+    //     grassColor.wrapS = grassNormal.wrapS = grassRoughness.wrapS = THREE.RepeatWrapping;
+    //     grassColor.wrapT = grassNormal.wrapT = grassRoughness.wrapT = THREE.RepeatWrapping;
+    //     // Травка «повыше»: меньше повторений = крупнее трава (6 вместо 20)
+    //     grassColor.repeat.set(6, 6);
+    //     grassNormal.repeat.set(6, 6);
+    //     grassRoughness.repeat.set(6, 6);
+    //     var grassMaterial = new THREE.MeshStandardMaterial({
+    //       map: grassColor,
+    //       normalMap: grassNormal,
+    //       roughnessMap: grassRoughness,
+    //       side: THREE.DoubleSide,
+    //       roughness: 0.8
+    //     });
+    //     floor.material.dispose();
+    //     floor.material = grassMaterial;
+    //   }
+
+    //   var grassColor = loader.load(grassUrls.color, function() { loaded.color = true; tryApplyGrass(); });
+    //   var grassNormal = loader.load(grassUrls.normal, function() { loaded.normal = true; tryApplyGrass(); });
+    //   var grassRoughness = loader.load(grassUrls.roughness, function() { loaded.roughness = true; tryApplyGrass(); });
