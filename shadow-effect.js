@@ -124,7 +124,7 @@
       // Размеры комнаты
       const roomWidth = header.getBoundingClientRect().width;
       const roomHeight = header.getBoundingClientRect().height;
-      const roomDepth = 50;
+      const roomDepth = 150;
       
       // Материал для стен - темный и полупрозрачный
       const wallMaterial = new THREE.MeshStandardMaterial({
@@ -154,19 +154,24 @@
     emissive: 0x112233
 });
       
-      // Рендер-таргет для зеркала (задняя стена)
-      const mirrorRenderTarget = new THREE.WebGLRenderTarget(512, 512, {
+      // Рендер-таргет для зеркала посреди комнаты (вертикальная плоскость x = mirrorX)
+      const justMirrorX = roomWidth / 2 - 10;
+      const justMirrorRenderTarget = new THREE.WebGLRenderTarget(512, 512, {
         minFilter: THREE.LinearFilter,
         magFilter: THREE.LinearFilter,
         format: THREE.RGBAFormat,
         stencilBuffer: false
       });
-      mirrorRenderTarget.texture.flipY = true;
-      const mirrorCamera = camera.clone();
+      justMirrorRenderTarget.texture.flipY = true;
+      const justMirrorTex = justMirrorRenderTarget.texture;
+justMirrorTex.wrapS = THREE.RepeatWrapping;
+justMirrorTex.repeat.x = -1;
+justMirrorTex.offset.x = 1;
+      const justMirrorCamera = camera.clone();
       
-      // Материал зеркала
-      const mirrorMaterial = new THREE.MeshBasicMaterial({
-        map: mirrorRenderTarget.texture,
+      // Материал зеркала посреди комнаты
+      const justMirrorMaterial = new THREE.MeshBasicMaterial({
+        map: justMirrorRenderTarget.texture,
         transparent: true,
         opacity: 0.95,
         side: THREE.DoubleSide
@@ -193,7 +198,7 @@
       const leftWall = new THREE.Mesh(leftWallGeometry, specialMaterial2);
       leftWall.rotation.y = Math.PI / 2;
       leftWall.position.x = -roomWidth / 2;
-      leftWall.position.z = -roomDepth / 2;
+      leftWall.position.z = -(roomDepth / 2);
       scene.add(leftWall);
       
       // Правая стена — цветная (бирюзовая)
@@ -204,11 +209,10 @@
       rightWall.position.z = -roomDepth / 2;
       scene.add(rightWall);
       
-      // Задняя стена — зеркало (отражает сцену)
+      // Задняя стена — обычная (полупрозрачная)
       const backWallGeometry = new THREE.PlaneGeometry(roomWidth, roomHeight);
-      const backWall = new THREE.Mesh(backWallGeometry, mirrorMaterial);
+      const backWall = new THREE.Mesh(backWallGeometry, wallMaterial);
       backWall.position.z = -roomDepth;
-      backWall.visible = true;
       scene.add(backWall);
       
       // Передняя стена — за камерой (z > 200), смотрит в сторону комнаты
@@ -218,7 +222,29 @@
       frontWall.rotation.y = Math.PI; // грань смотрит в сторону -Z (к камере и комнате)
       frontWall.receiveShadow = true;
       scene.add(frontWall);
-            
+
+
+      // Зеркало посреди комнаты (вертикальная плоскость, отражает сцену)
+      const justMirrorGeometry = new THREE.PlaneGeometry(roomDepth, roomHeight / 2);
+      const justMirror = new THREE.Mesh(justMirrorGeometry, justMirrorMaterial);
+      justMirror.rotation.y = -Math.PI / 2 ;
+      justMirror.position.x = justMirrorX;
+      justMirror.position.z = -roomDepth / 2;
+      scene.add(justMirror);
+      
+      // Белый шарик в центре комнаты
+      const ballGeometry = new THREE.SphereGeometry(25, 22, 22);
+      const ballMaterial = new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        roughness: 0.3,
+        metalness: 0.1
+      });
+      const centerBall = new THREE.Mesh(ballGeometry, ballMaterial);
+      centerBall.position.set(roomWidth/4 , 0, -roomDepth/2);
+      centerBall.castShadow = true;
+      centerBall.receiveShadow = true;
+      scene.add(centerBall);
+      
       // Настройка камеры
       camera.position.set(0, 0, 200);
       camera.lookAt(0, 0, 0);
@@ -346,19 +372,19 @@
         sync3DObjectsWithHTML();
         updateLightPosition();
         
-        // Зеркало: рендер сцены с отражённой камеры в текстуру
-        mirrorCamera.position.x = camera.position.x;
-        mirrorCamera.position.y = camera.position.y;
-        mirrorCamera.position.z = -2 * roomDepth - camera.position.z;
-        mirrorCamera.lookAt(0, 0, -2 * roomDepth);
-        mirrorCamera.updateMatrixWorld(true);
+        // Зеркало посреди комнаты: отражение относительно плоскости x = justMirrorX
+        justMirrorCamera.position.x = 2 * justMirrorX - camera.position.x;
+        justMirrorCamera.position.y = camera.position.y;
+        justMirrorCamera.position.z = camera.position.z;
+        justMirrorCamera.lookAt(2 * justMirrorX, 0, -roomDepth / 2);
+        justMirrorCamera.updateMatrixWorld(true);
         
-        backWall.visible = false;
-        renderer.setRenderTarget(mirrorRenderTarget);
+        justMirror.visible = false;
+        renderer.setRenderTarget(justMirrorRenderTarget);
         renderer.clear();
-        renderer.render(scene, mirrorCamera);
+        renderer.render(scene, justMirrorCamera);
         renderer.setRenderTarget(null);
-        backWall.visible = true;
+        justMirror.visible = true;
         
         renderer.render(scene, camera);
       }
