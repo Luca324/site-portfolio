@@ -204,6 +204,16 @@
       color: #888;
       font-size: 14px;
     }
+    canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            display: block;
+            pointer-events: none;
+        }
 
     @media (max-width: 768px) {
       .container {
@@ -236,6 +246,7 @@
       <h1>Татьяна Мосолова</h1>
       <p class="subtitle">Frontend Developer</p>
     </header>
+
     <section>
       <h2>Контакты</h2>
       <div class="contacts">
@@ -400,6 +411,221 @@
       <p>Хостинг предоставлен <a href="https://rsars.ru/" target="_blank" style="color: #2563eb; text-decoration: none;">rsars.ru</a></p>
     </footer>
   </div>
+  <canvas></canvas>
+    <script>
+        // physics-js.js
+        function initPhysics() {
+            let f32a = new Float32Array(0);
+            
+            // Вспомогательная функция для изменения размера массива
+            function resizeArray(arr, newSize) {
+                const newArr = new Float32Array(newSize);
+                newArr.set(arr.slice(0, Math.min(arr.length, newSize)));
+                return newArr;
+            }
+            
+            function getData() {
+                return f32a;
+            }
+            
+            function tick(count) {
+                // Обновляем только существующие частицы, не изменяя размер массива
+                const maxPtr = Math.min(count * 4, f32a.length);
+                for (let ptr = 0; ptr < maxPtr; ptr += 4) {
+                    f32a[ptr + 0] += f32a[ptr + 2]; // x += vx
+                    f32a[ptr + 1] += f32a[ptr + 3]; // y += vy
+                    f32a[ptr + 3] += 0.25;           // vy += гравитация
+                }
+            }
+            
+            function fire(x, y, vx, vy) {
+                // Создаем новый массив с дополнительным местом для новой частицы
+                const newSize = f32a.length + 4;
+                const newArray = new Float32Array(newSize);
+                newArray.set(f32a);
+                
+                // Добавляем новую частицу (x, y, vx, vy)
+                newArray[f32a.length] = x;
+                newArray[f32a.length + 1] = y;
+                newArray[f32a.length + 2] = vx;
+                newArray[f32a.length + 3] = vy;
+                
+                f32a = newArray;
+            }
+            
+            return { getData, tick, fire };
+        }
+
+        // renderer-webgl.js
+        function initRenderer(canvas) {
+            const gl = canvas.getContext('webgl', { alpha: false, antialias: false });
+            if (!gl) {
+                throw new Error('WebGL not supported');
+            }
+            
+            const buffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+            gl.clearColor(0, 0, 0, 1);
+
+            const program = gl.createProgram();
+
+            // vert.glsl
+            const vertShaderSource = `precision lowp float;
+
+attribute vec2 coord ;
+attribute vec2 scale;
+
+void main() {
+    gl_Position = vec4(
+        coord.x * scale.x - 1.0,
+        coord.y * scale.y + 1.0,
+        0.0,
+        1.0
+    );
+    gl_PointSize = 2.0;
+}`;
+
+            {
+                const shader = gl.createShader(gl.VERTEX_SHADER);
+                gl.shaderSource(shader, vertShaderSource);
+                gl.compileShader(shader);
+                gl.attachShader(program, shader);
+            }
+
+            // frag.glsl
+            const fragShaderSource = `precision lowp float;
+
+void main() {
+    gl_FragColor = vec4(1,1,1,1);
+}`;
+
+            {
+                const shader = gl.createShader(gl.FRAGMENT_SHADER);
+                gl.shaderSource(shader, fragShaderSource);
+                gl.compileShader(shader);
+                gl.attachShader(program, shader);
+            }
+            gl.linkProgram(program);
+            gl.useProgram(program);
+
+            {
+                const attribLocation = gl.getAttribLocation(program, 'coord');
+                gl.enableVertexAttribArray(attribLocation);
+                gl.vertexAttribPointer(
+                    attribLocation,
+                    2, gl.FLOAT, false, 16, 0
+                );
+            }
+
+            // Инициализация scale атрибута
+            {
+                const attribLocation = gl.getAttribLocation(program, 'scale');
+                gl.disableVertexAttribArray(attribLocation);
+                const width = canvas.width || 800;
+                const height = canvas.height || 600;
+                gl.vertexAttrib2f(
+                    attribLocation,
+                    2 / width,
+                    -2 / height
+                );
+            }
+
+            function render(data, count, width, height) {
+                if (width !== canvas.width || height !== canvas.height) {
+                    canvas.width = width;
+                    canvas.height = height;
+                    gl.viewport(0, 0, width, height);
+
+                    const attribLocation = gl.getAttribLocation(program, 'scale');
+                    gl.disableVertexAttribArray(attribLocation);
+                    gl.vertexAttrib2f(
+                        attribLocation,
+                        2 / canvas.width,
+                        -2 / canvas.height
+                    );
+                }
+
+                // Убеждаемся, что не пытаемся отрисовать больше, чем есть в массиве
+                const actualCount = Math.min(count, data.length / 4);
+                
+                if (actualCount > 0) {
+                    gl.bufferData(
+                        gl.ARRAY_BUFFER,
+                        data.subarray(0, actualCount * 4),
+                        gl.DYNAMIC_DRAW
+                    );
+                }
+                
+                gl.clear(gl.COLOR_BUFFER_BIT);
+                if (actualCount > 0) {
+                    gl.drawArrays(gl.POINTS, 0, actualCount);
+                }
+            }
+
+            return { render };
+        }
+
+        // entry.js
+        function main() {
+            const canvas = document.querySelector('canvas');
+            
+            const particlesCount = 100;
+            let canvasWidth;
+            let canvasHeight;
+            
+            const { getData, tick, fire } = initPhysics();
+            const { render } = initRenderer(canvas);
+            
+            const resizeHandler = () => {
+                canvasWidth = canvas.clientWidth;
+                canvasHeight = canvas.clientHeight;
+            };
+            window.addEventListener('resize', resizeHandler);
+            resizeHandler();
+            
+            const clickHandler = (e) => {
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // Создаем 1000 частиц, разлетающихся в разные стороны
+                for (let i = 0; i < particlesCount; i++) {
+                    const angle = (Math.PI * 2 * i) / particlesCount;
+                    const speed = 2 + Math.random() * 3;
+                    const vx = Math.cos(angle) * speed;
+                    const vy = Math.sin(angle) * speed;
+                    fire(x, y, vx, vy);
+                }
+            };
+            document.addEventListener('click', clickHandler);
+            
+            let lastTs = 0;
+            const targetFPS = 60;
+            const frameTime = 1000 / targetFPS;
+            
+            const frame = (timestamp) => {
+                requestAnimationFrame(frame);
+                
+                const deltaTime = timestamp - lastTs;
+                if (deltaTime < frameTime) return;
+                
+                lastTs = timestamp;
+                
+                const data = getData();
+                const actualParticlesCount = data.length / 4;
+                
+                if (actualParticlesCount > 0) {
+                    tick(actualParticlesCount);
+                    render(data, actualParticlesCount, canvasWidth, canvasHeight);
+                } else {
+                    render(data, 0, canvasWidth, canvasHeight);
+                }
+            };
+            frame();
+        }
+
+        main();
+    </script>
 
   <script>
     (function () {
@@ -511,5 +737,6 @@
       });
     })();
   </script>
+
 </body>
 </html>
