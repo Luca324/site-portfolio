@@ -170,27 +170,103 @@
       backWall.position.z = -roomDepth;
       scene.add(backWall);
       
-      // ТЕСТ: Добавляем видимый красный куб в центре
-      const testGeometry = new THREE.BoxGeometry(50, 50, 50);
-      const testMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-      const testCube = new THREE.Mesh(testGeometry, testMaterial);
-      testCube.position.set(0, 0, -roomDepth / 2);
-      scene.add(testCube);
-      
       // Настройка камеры
       camera.position.set(0, 0, 200);
       camera.lookAt(0, 0, 0);
       
-      // Ambient light для базовой видимости - увеличиваем для лучшей видимости
+      // Включаем тени
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      
+      // Ambient light для базовой видимости
       const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
       scene.add(ambientLight);
       
-      // PointLight, следующий за курсором - яркий свет
+      // PointLight, следующий за курсором - ближе к камере
       const cursorLight = new THREE.PointLight(0xffffff, 3);
-      cursorLight.position.set(0, 0, -roomDepth / 2); // На той же глубине, что и куб
-      cursorLight.distance = 1000; // Увеличиваем дальность
-      cursorLight.decay = 0; // Без затухания для более яркого света
+      cursorLight.position.set(0, 0, 150); // Ближе к камере (z=200), объекты на z=-125
+      cursorLight.castShadow = true;
+      cursorLight.shadow.mapSize.width = 2048;
+      cursorLight.shadow.mapSize.height = 2048;
+      cursorLight.shadow.camera.near = 0.1;
+      cursorLight.shadow.camera.far = 500;
+      cursorLight.distance = 1000;
+      cursorLight.decay = 0;
       scene.add(cursorLight);
+      
+      // Получаем HTML элементы
+      const photoEl = header.querySelector('.profile-photo');
+      const nameEl = header.querySelector('h1');
+      const subtitleEl = header.querySelector('.subtitle');
+      
+      // 3D объекты для теней
+      // В Three.js объекты с visible: false НЕ отбрасывают тени
+      // Поэтому используем очень темный материал, который будет почти невидим
+      const shadowMaterial = new THREE.MeshStandardMaterial({ 
+        color: 0x000000,
+        transparent: true,
+        opacity: 0.01 // Почти невидимый, но отбрасывает тени
+      });
+      
+      const photoSphere = new THREE.Mesh(
+        new THREE.SphereGeometry(75, 32, 32),
+        shadowMaterial.clone()
+      );
+      photoSphere.castShadow = true;
+      photoSphere.receiveShadow = false;
+      scene.add(photoSphere);
+      
+      const nameBox = new THREE.Mesh(
+        new THREE.BoxGeometry(200, 40, 10),
+        shadowMaterial.clone()
+      );
+      nameBox.castShadow = true;
+      nameBox.receiveShadow = false;
+      scene.add(nameBox);
+      
+      const subtitleBox = new THREE.Mesh(
+        new THREE.BoxGeometry(150, 25, 10),
+        shadowMaterial.clone()
+      );
+      subtitleBox.castShadow = true;
+      subtitleBox.receiveShadow = false;
+      scene.add(subtitleBox);
+      
+      // Стены должны получать тени
+      floor.receiveShadow = true;
+      ceiling.receiveShadow = true;
+      leftWall.receiveShadow = true;
+      rightWall.receiveShadow = true;
+      backWall.receiveShadow = true;
+      
+      // Функция синхронизации 3D объектов с HTML элементами
+      function sync3DObjectsWithHTML() {
+        if (photoEl) {
+          const rect = photoEl.getBoundingClientRect();
+          const headerRect = header.getBoundingClientRect();
+          photoSphere.position.x = (rect.left + rect.width / 2) - (headerRect.left + headerRect.width / 2);
+          photoSphere.position.y = -((rect.top + rect.height / 2) - (headerRect.top + headerRect.height / 2));
+          photoSphere.position.z = -roomDepth / 2;
+        }
+        
+        if (nameEl) {
+          const rect = nameEl.getBoundingClientRect();
+          const headerRect = header.getBoundingClientRect();
+          nameBox.position.x = (rect.left + rect.width / 2) - (headerRect.left + headerRect.width / 2);
+          nameBox.position.y = -((rect.top + rect.height / 2) - (headerRect.top + headerRect.height / 2));
+          nameBox.position.z = -roomDepth / 2;
+        }
+        
+        if (subtitleEl) {
+          const rect = subtitleEl.getBoundingClientRect();
+          const headerRect = header.getBoundingClientRect();
+          subtitleBox.position.x = (rect.left + rect.width / 2) - (headerRect.left + headerRect.width / 2);
+          subtitleBox.position.y = -((rect.top + rect.height / 2) - (headerRect.top + headerRect.height / 2));
+          subtitleBox.position.z = -roomDepth / 2;
+        }
+      }
+      
+      sync3DObjectsWithHTML();
       
       // Обработчик движения мыши
       let mouseX = 0;
@@ -198,56 +274,37 @@
       let mousemoveCount = 0;
       
       document.addEventListener('mousemove', function(event) {
-        mousemoveCount++;
         const headerRect = header.getBoundingClientRect();
         // Нормализуем координаты от -1 до 1
         mouseX = ((event.clientX - headerRect.left) / headerRect.width) * 2 - 1;
         mouseY = -(((event.clientY - headerRect.top) / headerRect.height) * 2 - 1);
-        
-        // #region agent log
-        if (mousemoveCount <= 3) {
-          fetch('http://127.0.0.1:7242/ingest/0d3828e4-3326-41aa-9e48-f35ccc0bc97e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'shadow-effect.js:197',message:'mousemove',data:{mouseX:mouseX,mouseY:mouseY,headerWidth:headerRect.width,headerHeight:headerRect.height},timestamp:Date.now(),runId:'init',hypothesisId:'F'})}).catch(()=>{});
-        }
-        // #endregion
       });
       
       // Обновление позиции света в анимации
-      let updateCount = 0;
       function updateLightPosition() {
-        updateCount++;
         // Масштабируем координаты мыши под размеры сцены
         const scale = Math.min(roomWidth, roomHeight) * 0.4;
-        const oldX = cursorLight.position.x;
-        const oldY = cursorLight.position.y;
         cursorLight.position.x = mouseX * scale;
         cursorLight.position.y = mouseY * scale;
-        // Z остается на -roomDepth / 2
-        
-        // #region agent log
-        if (updateCount <= 20 || (updateCount % 60 === 0)) {
-          fetch('http://127.0.0.1:7242/ingest/0d3828e4-3326-41aa-9e48-f35ccc0bc97e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'shadow-effect.js:205',message:'updateLightPosition',data:{oldX:oldX,oldY:oldY,newX:cursorLight.position.x,newY:cursorLight.position.y,newZ:cursorLight.position.z,mouseX:mouseX,mouseY:mouseY,scale:scale,lightIntensity:cursorLight.intensity},timestamp:Date.now(),runId:'init',hypothesisId:'F'})}).catch(()=>{});
-        }
-        // #endregion
+        // Z остается на 150 (ближе к камере, между камерой и объектами)
       }
       
-      // #region agent log
-      fetch('http://127.0.0.1:7242/ingest/0d3828e4-3326-41aa-9e48-f35ccc0bc97e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'shadow-effect.js:232',message:'Тестовый куб и свет добавлены',data:{sceneChildren:scene.children.length,lightPos:{x:cursorLight.position.x,y:cursorLight.position.y,z:cursorLight.position.z},lightIntensity:cursorLight.intensity,cubePos:{x:testCube.position.x,y:testCube.position.y,z:testCube.position.z},cameraPos:{x:camera.position.x,y:camera.position.y,z:camera.position.z},roomDepth:roomDepth},timestamp:Date.now(),runId:'init',hypothesisId:'F'})}).catch(()=>{});
-      // #endregion
-      
-      // Анимация с обновлением света от курсора
-      function testAnimate() {
-        requestAnimationFrame(testAnimate);
-        testCube.rotation.x += 0.01;
-        testCube.rotation.y += 0.01;
+      // Анимация с обновлением света и синхронизацией объектов
+      function animate() {
+        requestAnimationFrame(animate);
+        sync3DObjectsWithHTML();
         updateLightPosition();
         renderer.render(scene, camera);
       }
       
-      // Запускаем тестовую анимацию
-      // #region agent log
-      fetch('http://127.0.0.1:7242/ingest/0d3828e4-3326-41aa-9e48-f35ccc0bc97e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'shadow-effect.js:105',message:'Запуск тестовой анимации',data:{},timestamp:Date.now(),runId:'init',hypothesisId:'E'})}).catch(()=>{});
-      // #endregion
-      testAnimate();
+      // Обновление при изменении размера окна
+      window.addEventListener('resize', function() {
+        updateSize();
+        sync3DObjectsWithHTML();
+      });
+      
+      // Запускаем анимацию
+      animate();
       
     } catch (error) {
       // #region agent log
