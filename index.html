@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Татьяна Мосолова — Frontend Developer</title>
+  <script src="https://unpkg.com/three@0.155.0/build/three.min.js"></script>
   <style>
     * {
       margin: 0;
@@ -26,8 +27,26 @@
     }
 
     header {
+      position: relative;
       text-align: center;
       padding-bottom: 30px;
+    }
+
+    #shadow-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    header .profile-photo,
+    header h1,
+    header .subtitle {
+      position: relative;
+      z-index: 1;
     }
 
     h1 {
@@ -234,6 +253,7 @@
 <body>
   <div class="container">
     <header>
+      <canvas id="shadow-canvas"></canvas>
       <img src="me.jfif" alt="Татьяна Мосолова" class="profile-photo">
       <h1>Татьяна Мосолова</h1>
       <p class="subtitle">Frontend Developer</p>
@@ -553,6 +573,8 @@
       });
     })();
   </script>
+
+  <script src="shadow-effect.js"></script>
 
 </body>
 </html>
