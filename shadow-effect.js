@@ -131,7 +131,7 @@
         color: 0xf5f5f5,
         side: THREE.DoubleSide,
         transparent: true,
-        opacity: 0.9
+        opacity: 0.6
       });
       
       // Пол
@@ -186,8 +186,8 @@
       
       // PointLight, следующий за курсором - ближе к объектам (на 2/3 пути от камеры)
       // Цвет света соответствует цвету ссылок заголовков (#2563eb)
-      const cursorLight = new THREE.PointLight(0x2563eb, 3);
-      cursorLight.position.set(0, 0, 0); // Ближе к объектам (z=-125), камера на z=200
+      const cursorLight = new THREE.PointLight(0x2563eb, 10);
+      cursorLight.position.set(0, 0, 200); // Ближе к объектам (z=-125), камера на z=200
       cursorLight.castShadow = true;
       cursorLight.shadow.mapSize.width = 2048;
       cursorLight.shadow.mapSize.height = 2048;
