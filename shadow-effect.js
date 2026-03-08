@@ -154,9 +154,15 @@
     emissive: 0x112233
 });
       
-      // Рендер-таргет для зеркала посреди комнаты (вертикальная плоскость x = mirrorX)
-      const justMirrorX = roomWidth / 2 - 10;
-      const justMirrorRenderTarget = new THREE.WebGLRenderTarget(512, 512, {
+      // --- Параметры зеркала (вертикальная плоскость x = mirrorPlaneX) ---
+      const mirrorPlaneX = roomWidth / 2 - 10;   // позиция плоскости зеркала по X
+      const mirrorPlaneY = 0;                    // центр зеркала по Y
+      const mirrorPlaneZ = -roomDepth / 2;       // центр зеркала по Z
+      const mirrorWidth = roomDepth;             // ширина зеркала (вдоль оси Z сцены)
+      const mirrorHeight = roomHeight / 2;      // высота зеркала
+      const mirrorRenderTargetSize = 512;        // разрешение текстуры отражения
+      
+      const justMirrorRenderTarget = new THREE.WebGLRenderTarget(mirrorRenderTargetSize, mirrorRenderTargetSize, {
         minFilter: THREE.LinearFilter,
         magFilter: THREE.LinearFilter,
         format: THREE.RGBAFormat,
@@ -164,12 +170,12 @@
       });
       justMirrorRenderTarget.texture.flipY = true;
       const justMirrorTex = justMirrorRenderTarget.texture;
-justMirrorTex.wrapS = THREE.RepeatWrapping;
-justMirrorTex.repeat.x = -1;
-justMirrorTex.offset.x = 1;
+      justMirrorTex.wrapS = THREE.RepeatWrapping;
+      justMirrorTex.repeat.x = -1;
+      justMirrorTex.offset.x = 1;
       const justMirrorCamera = camera.clone();
       
-      // Материал зеркала посреди комнаты
+      // Материал зеркала
       const justMirrorMaterial = new THREE.MeshBasicMaterial({
         map: justMirrorRenderTarget.texture,
         transparent: true,
@@ -224,12 +230,11 @@ justMirrorTex.offset.x = 1;
       scene.add(frontWall);
 
 
-      // Зеркало посреди комнаты (вертикальная плоскость, отражает сцену)
-      const justMirrorGeometry = new THREE.PlaneGeometry(roomDepth, roomHeight / 2);
+      // Зеркало (вертикальная плоскость, отражает сцену)
+      const justMirrorGeometry = new THREE.PlaneGeometry(mirrorWidth, mirrorHeight);
       const justMirror = new THREE.Mesh(justMirrorGeometry, justMirrorMaterial);
-      justMirror.rotation.y = -Math.PI / 2 ;
-      justMirror.position.x = justMirrorX;
-      justMirror.position.z = -roomDepth / 2;
+      justMirror.rotation.y = -Math.PI / 2;
+      justMirror.position.set(mirrorPlaneX, mirrorPlaneY, mirrorPlaneZ);
       scene.add(justMirror);
       
       // Белый шарик в центре комнаты
@@ -372,11 +377,11 @@ justMirrorTex.offset.x = 1;
         sync3DObjectsWithHTML();
         updateLightPosition();
         
-        // Зеркало посреди комнаты: отражение относительно плоскости x = justMirrorX
-        justMirrorCamera.position.x = 2 * justMirrorX - camera.position.x;
+        // Зеркало: отражение относительно плоскости x = mirrorPlaneX
+        justMirrorCamera.position.x = 2 * mirrorPlaneX - camera.position.x;
         justMirrorCamera.position.y = camera.position.y;
         justMirrorCamera.position.z = camera.position.z;
-        justMirrorCamera.lookAt(2 * justMirrorX, 0, -roomDepth / 2);
+        justMirrorCamera.lookAt(2 * mirrorPlaneX, mirrorPlaneY, mirrorPlaneZ);
         justMirrorCamera.updateMatrixWorld(true);
         
         justMirror.visible = false;
