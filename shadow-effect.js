@@ -88,7 +88,7 @@
     try {
       // Инициализация Three.js сцены
       const scene = new THREE.Scene();
-      scene.background = new THREE.Color(0xffffff); // Белый фон
+      scene.background = null; // Прозрачный фон
 
       // Камера
       const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
@@ -98,12 +98,12 @@
       // Рендерер
       const renderer = new THREE.WebGLRenderer({
         canvas: canvas,
-        alpha: false, // Непрозрачный фон для теста
+        alpha: true, // Прозрачный фон
         antialias: true
       });
       
       renderer.setPixelRatio(window.devicePixelRatio);
-      renderer.setClearColor(0xffffff, 1); // Белый фон
+      renderer.setClearColor(0x000000, 0); // Прозрачный фон
       
       // Обновление размеров
       function updateSize() {
@@ -182,9 +182,9 @@
       const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
       scene.add(ambientLight);
       
-      // PointLight, следующий за курсором - ближе к камере
+      // PointLight, следующий за курсором - ближе к объектам (на 2/3 пути от камеры)
       const cursorLight = new THREE.PointLight(0xffffff, 3);
-      cursorLight.position.set(0, 0, 150); // Ближе к камере (z=200), объекты на z=-125
+      cursorLight.position.set(0, 0, 0); // Ближе к объектам (z=-125), камера на z=200
       cursorLight.castShadow = true;
       cursorLight.shadow.mapSize.width = 2048;
       cursorLight.shadow.mapSize.height = 2048;
@@ -286,7 +286,7 @@
         const scale = Math.min(roomWidth, roomHeight) * 0.4;
         cursorLight.position.x = mouseX * scale;
         cursorLight.position.y = mouseY * scale;
-        // Z остается на 150 (ближе к камере, между камерой и объектами)
+        // Z остается на 0 (ближе к объектам, на 2/3 пути от камеры)
       }
       
       // Анимация с обновлением света и синхронизацией объектов
