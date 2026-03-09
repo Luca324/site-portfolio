@@ -61,9 +61,13 @@ export function initBall(scene, roomWidth, roomHeight, roomDepth) {
   // Белый шарик в центре комнаты
   const ballGeometry = new THREE.SphereGeometry(25, 22, 22);
   const ballMaterial = new THREE.MeshStandardMaterial({
-    color: 0xf9da88,
-    roughness: 0.3,
-    metalness: 0.1
+    color: 0x38bdf8,
+    emissive: 0x0ea5e9,
+    emissiveIntensity: 0.7,
+    roughness: 0.12,
+    metalness: 0.95,
+    transparent: true,
+    opacity: 0.70
   });
   const centerBall = new THREE.Mesh(ballGeometry, ballMaterial);
   centerBall.position.set(roomWidth * 0.4, 0, -roomDepth * 0.75); // сдвиг x,y,z (вправо, вверх, вблизь при + значениях). значение 0.5 по x значит запечататься в стену

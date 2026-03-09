@@ -1,14 +1,14 @@
 import { initWalls, initBall, initAmbientLight } from "./initWalls.js";
-const roomDepth = 350;
+const roomDepth = 150;
 // Выбор варианта материала зеркала (1–5)
-const MIRROR_MATERIAL_VARIANT = 2;
+const MIRROR_MATERIAL_VARIANT = 5
 
 // Инициализация Three.js сцены
 const scene = new THREE.Scene();
 scene.background = null; // Прозрачный фон
 
 // Обработчик движения мыши
-const cursorLight = new THREE.PointLight(0xffffff, 4);
+const cursorLight = new THREE.PointLight(0xffffff, 5);
 let mouseX = 0;
 let mouseY = 0;
 let mousemoveCount = 0;
@@ -267,10 +267,11 @@ function renderMirror(scene, sizes) {
   justMirrorCamera.position.x = mirrorPlaneX * 2;
 
   const reflLookAt = reflectPoint(camPos, roomCenterPoint, roomCenterNormal);
+  reflLookAt.x = reflLookAt.x - 100
   justMirrorCamera.lookAt(reflLookAt);
 
   // Расстояние от зрителя до зеркала
-  const distanceToMirror = Math.abs(camPos.x - mirrorPlaneX);
+  const distanceToMirror = Math.abs(camPos.x - mirrorPlaneX) + 10;
 
   // Высота зеркала в мировых координатах
   const mirrorWorldHeight = mirrorHeight;
