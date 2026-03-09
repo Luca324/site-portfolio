@@ -423,8 +423,8 @@
         const camPos = camera.position; 
         const reflPos = reflectPoint(camPos, mirrorPoint, mirrorNormal);
         justMirrorCamera.position.copy(reflPos);
-        // куда (на что) смотрим - Отраженная камера относительно середины комнаты. курсор изначальео писал что смотрим в 0 0 0. может это и верно. пока код не удаляю
-        const camTarget = new THREE.Vector3(0, 0, 0); // если поменяешь camera.lookAt, синхронизируй сюда // не знаю куда смотреть, на 00 или на отражение камеры относительно середины комнаты. второе я сама придумала...
+        // куда (на что) смотрим - Отраженная камера относительно середины комнаты. курсор изначальео писал что смотрим в 0 0 0.
+        const camTarget = new THREE.Vector3(0, 0, 0); // если поменяешь camera.lookAt, синхронизируй сюда // по логике нужно смотреть на отражение камеры относительно середины комнаты, т.к. угол падения равен углу отражения
         const reflTarget = reflectPoint(camPos, roomCenterPoint, roomCenterNormal)
         justMirrorCamera.lookAt(reflTarget);
         justMirrorCamera.updateMatrixWorld(true);
