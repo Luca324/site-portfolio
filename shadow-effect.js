@@ -44,8 +44,6 @@
   waitForThree(function () {
     if (typeof THREE === 'undefined') {
 
-      fetch('http://127.0.0.1:7242/ingest/0d3828e4-3326-41aa-9e48-f35ccc0bc97e', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ location: 'shadow-effect.js:40', message: 'Three.js не загружен после ожидания', data: {}, timestamp: Date.now(), runId: 'init', hypothesisId: 'A' }) }).catch(() => { });
-      // #endregion
       console.error('Three.js не загружен после ожидания');
       return;
     }
@@ -208,6 +206,10 @@
 
       // Используем первый вариант по умолчанию
       const justMirrorMaterial = justMirrorMaterial2;
+      
+      // Отражаем текстурные координаты
+justMirrorMaterial.map.wrapS = THREE.RepeatWrapping;
+justMirrorMaterial.map.repeat.x = -1; // Отражаем по горизонтали
 
       // Пол - темно-серый полированный
       const floorGeometry = new THREE.PlaneGeometry(roomWidth, roomDepth);
@@ -398,45 +400,51 @@
         cursorLight.position.y = mouseY * scale;
         // Z остается на 0 (ближе к объектам, на 2/3 пути от камеры)
       }
-
-      // Анимация с обновлением света и синхронизацией объектов
       function animate() {
         requestAnimationFrame(animate);
         sync3DObjectsWithHTML();
         updateLightPosition();
-
-        // Геометрия плоскости зеркала: точка на плоскости и нормаль
-        const mirrorNormal = new THREE.Vector3(1, 0, 0).normalize(); // плоскость x = mirrorPlaneX
+      
+        const mirrorNormal = new THREE.Vector3(1, 0, 0).normalize();
         const mirrorPoint = new THREE.Vector3(mirrorPlaneX, mirrorPlaneY, mirrorPlaneZ);
-
         
-        const roomCenterNormal = new THREE.Vector3(0, 0, 1); // нормаль направлена к камере (в сторону +Z)
+        const roomCenterNormal = new THREE.Vector3(0, 0, 1);
         const roomCenterPoint = new THREE.Vector3(0, 0, -roomDepth / 2);
-
-        // Отражённая камера относительно плоскости зеркала
-        // Позиция и цель основной камеры (сейчас она смотрит в (0,0,0))
-
-        // Откуда смотрим - Отражённая камера относительно плоскости зеркала
-        const camPos = camera.position; 
-        const reflPos = reflectPoint(camPos, mirrorPoint, mirrorNormal);
-        justMirrorCamera.position.copy(reflPos);
-        // куда (на что) смотрим - Отраженная камера относительно середины комнаты. курсор изначальео писал что смотрим в 0 0 0.
-        const camTarget = new THREE.Vector3(0, 0, 0); // если поменяешь camera.lookAt, синхронизируй сюда // по логике нужно смотреть на отражение камеры относительно середины комнаты, т.к. угол падения равен углу отражения
-        const reflTarget = reflectPoint(camPos, roomCenterPoint, roomCenterNormal)
-        justMirrorCamera.lookAt(reflTarget);
+        
+        const camPos = camera.position;
+        justMirrorCamera.position.copy(camPos);
+        justMirrorCamera.position.x = mirrorPlaneX *2;
+        
+        const reflLookAt = reflectPoint(camPos, roomCenterPoint, roomCenterNormal);
+        justMirrorCamera.lookAt(reflLookAt);
+        
+        // Расстояние от зрителя до зеркала
+        const distanceToMirror = Math.abs(camPos.x - mirrorPlaneX);
+        
+        // Высота зеркала в мировых координатах
+        const mirrorWorldHeight = mirrorHeight;
+        const mirrorWorldWidth = mirrorWidth;
+        
+        // Рассчитываем вертикальный угол обзора
+        const verticalFov = 2 * Math.atan((mirrorWorldHeight/2) / distanceToMirror) * 180 / Math.PI;
+        
+        // Устанавливаем FOV и aspect для отраженной камеры
+        justMirrorCamera.fov = verticalFov;
+        justMirrorCamera.aspect = mirrorWorldWidth / mirrorWorldHeight; // ВАЖНО: соотношение сторон зеркала
+        
+        // Обновляем проекционную матрицу
+        justMirrorCamera.updateProjectionMatrix();
         justMirrorCamera.updateMatrixWorld(true);
-
-
+      
         justMirror.visible = false;
         renderer.setRenderTarget(justMirrorRenderTarget);
         renderer.clear();
         renderer.render(scene, justMirrorCamera);
         renderer.setRenderTarget(null);
         justMirror.visible = true;
-
+      
         renderer.render(scene, camera);
       }
-
       // Отражение точки p относительно плоскости (planePoint, planeNormal)
       function reflectPoint(p, planePoint, planeNormal) {
         const N = planeNormal.clone().normalize();
