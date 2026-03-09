@@ -186,37 +186,35 @@ function initMirror(scene, header) {
 
 function renderMirror(scene, sizes) {
   const { roomWidth, roomHeight, mirrorPlaneX, mirrorPlaneY, mirrorPlaneZ, mirrorWidth, mirrorHeight, mirrorRenderTargetSize } = sizes
-  
+
   const mirrorNormal = new THREE.Vector3(1, 0, 0).normalize();
   const mirrorPoint = new THREE.Vector3(mirrorPlaneX, mirrorPlaneY, mirrorPlaneZ);
 
+  const roomCenterNormal = new THREE.Vector3(0, 0, 1);
+  const roomCenterPoint = new THREE.Vector3(0, 0, -roomDepth / 2);
+
   const camPos = camera.position;
+  justMirrorCamera.position.copy(camPos);
+  justMirrorCamera.position.x = mirrorPlaneX * 2;
 
-  // 1. Правильная отраженная позиция камеры
-  const reflPos = reflectPoint(camPos, mirrorPoint, mirrorNormal);
-  justMirrorCamera.position.copy(reflPos);
-
-  // 2. Направление взгляда основной камеры (нормализованный вектор)
-  const lookDirection = new THREE.Vector3(0, 0, -1); // камера смотрит вдоль -Z
-
-  // 3. Отражаем направление взгляда относительно нормали зеркала
-  const reflDirection = reflectDirection(lookDirection, mirrorNormal);
-
-  // 4. Устанавливаем направление отраженной камеры
-  // Точка, в которую смотрит камера = позиция + направление
-  const reflLookAt = justMirrorCamera.position.clone().add(reflDirection);
+  const reflLookAt = reflectPoint(camPos, roomCenterPoint, roomCenterNormal);
   justMirrorCamera.lookAt(reflLookAt);
 
-  // Остальной код FOV оставляем как есть
+  // Расстояние от зрителя до зеркала
   const distanceToMirror = Math.abs(camPos.x - mirrorPlaneX);
+
+  // Высота зеркала в мировых координатах
   const mirrorWorldHeight = mirrorHeight;
   const mirrorWorldWidth = mirrorWidth;
 
+  // Рассчитываем вертикальный угол обзора
   const verticalFov = 2 * Math.atan((mirrorWorldHeight / 2) / distanceToMirror) * 180 / Math.PI;
 
+  // Устанавливаем FOV и aspect для отраженной камеры
   justMirrorCamera.fov = verticalFov;
-  justMirrorCamera.aspect = mirrorWorldWidth / mirrorWorldHeight;
+  justMirrorCamera.aspect = mirrorWorldWidth / mirrorWorldHeight; // ВАЖНО: соотношение сторон зеркала
 
+  // Обновляем проекционную матрицу
   justMirrorCamera.updateProjectionMatrix();
   justMirrorCamera.updateMatrixWorld(true);
 
