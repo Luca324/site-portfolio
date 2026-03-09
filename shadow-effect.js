@@ -124,7 +124,7 @@
       // Размеры комнаты
       const roomWidth = header.getBoundingClientRect().width;
       const roomHeight = header.getBoundingClientRect().height;
-      const roomDepth = 150;
+      const roomDepth = 50;
       
       // Материал для стен - темный и полупрозрачный
       const wallMaterial = new THREE.MeshStandardMaterial({
@@ -159,10 +159,13 @@
       const mirrorPlaneY = 0;                    // центр зеркала по Y
       const mirrorPlaneZ = -roomDepth / 2;       // центр зеркала по Z
       const mirrorWidth = roomDepth;             // ширина зеркала (вдоль оси Z сцены)
-      const mirrorHeight = roomHeight / 2;      // высота зеркала
-      const mirrorRenderTargetSize = 512;        // разрешение текстуры отражения
-      
-      const justMirrorRenderTarget = new THREE.WebGLRenderTarget(mirrorRenderTargetSize, mirrorRenderTargetSize, {
+      const mirrorHeight = roomHeight / 2;       // высота зеркала
+      const mirrorRtBase = 512;                  // база разрешения (длинная сторона)
+      const mirrorAspect = mirrorWidth / mirrorHeight;
+      const mirrorRtW = mirrorAspect >= 1 ? mirrorRtBase : Math.round(mirrorRtBase * mirrorAspect);
+      const mirrorRtH = mirrorAspect >= 1 ? Math.round(mirrorRtBase / mirrorAspect) : mirrorRtBase;
+
+      const justMirrorRenderTarget = new THREE.WebGLRenderTarget(mirrorRtW, mirrorRtH, {
         minFilter: THREE.LinearFilter,
         magFilter: THREE.LinearFilter,
         format: THREE.RGBAFormat,
@@ -174,7 +177,9 @@
       justMirrorTex.repeat.x = -1;
       justMirrorTex.offset.x = 1;
       const justMirrorCamera = camera.clone();
-      
+      justMirrorCamera.aspect = mirrorAspect;
+      justMirrorCamera.updateProjectionMatrix();
+
       // Материал зеркала
       const justMirrorMaterial = new THREE.MeshBasicMaterial({
         map: justMirrorRenderTarget.texture,
@@ -381,8 +386,10 @@
         justMirrorCamera.position.x = 2 * mirrorPlaneX - camera.position.x;
         justMirrorCamera.position.y = camera.position.y;
         justMirrorCamera.position.z = camera.position.z;
-        justMirrorCamera.lookAt(2 * mirrorPlaneX, mirrorPlaneY, mirrorPlaneZ);
+        justMirrorCamera.lookAt(2 * mirrorPlaneX, 0, 0);
         justMirrorCamera.updateMatrixWorld(true);
+        justMirrorCamera.aspect = mirrorAspect;
+        justMirrorCamera.updateProjectionMatrix();
         
         justMirror.visible = false;
         renderer.setRenderTarget(justMirrorRenderTarget);
