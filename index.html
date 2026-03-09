@@ -29,26 +29,11 @@
     header {
       position: relative;
       text-align: center;
-      height: 100vh;
-      min-height: 640px;
+      padding-bottom: 30px;
+      height: 600px;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 0 24px;
-      overflow: hidden;
-    }
-
-    header::before {
-      content: "";
-      position: absolute;
-      inset: -20%;
-      background:
-        radial-gradient(circle at top left, rgba(59, 130, 246, 0.5), transparent 55%),
-        radial-gradient(circle at bottom right, rgba(56, 189, 248, 0.48), transparent 55%);
-      mix-blend-mode: screen;
-      opacity: 0.8;
-      z-index: 0;
-      pointer-events: none;
     }
 
     #shadow-canvas {
@@ -61,7 +46,6 @@
       pointer-events: none;
     }
 
-   
     header .profile-photo,
     header h1,
     header .subtitle {
@@ -70,27 +54,26 @@
     }
 
     h1 {
-      font-size: 40px;
-      font-weight: 650;
-      letter-spacing: 0.04em;
-      margin-bottom: 12px;
-      color: #f9fafb;
+      font-size: 36px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: #1a1a1a;
     }
 
     .subtitle {
       font-size: 18px;
-      color: var(--color-text-muted);
+      color: #666;
       font-weight: 400;
     }
 
     .profile-photo {
-      width: 160px;
-      height: 160px;
+      width: 150px;
+      height: 150px;
       border-radius: 50%;
       object-fit: cover;
-      margin: 0 auto 22px;
+      margin: 0 auto 20px;
       display: block;
-      border: 4px solid rgba(148, 163, 184, 0.55);
+      border: 3px solid #e0e0e0;
     }
 
     section {
@@ -170,6 +153,7 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
       display: block;
       transition: transform 0.1s ease-out;
+      transform-style: preserve-3d;
     }
 
     .project-image-wrapper {
@@ -248,11 +232,11 @@
 
     @media (max-width: 768px) {
       .container {
-        padding: 40px 16px 56px;
+        padding: 40px 15px;
       }
 
       h1 {
-        font-size: 30px;
+        font-size: 28px;
       }
 
       h2 {
@@ -264,29 +248,21 @@
       }
 
       .profile-photo {
-        width: 128px;
-        height: 128px;
+        width: 120px;
+        height: 120px;
       }
-
-      header {
-        min-height: 540px;
-        padding: 0 16px;
-      }
-
     }
   </style>
 </head>
 <body>
-  <header>
-    <canvas id="shadow-canvas"></canvas>
-    <div class="hero-content">
+  <div class="container">
+    <header>
+      <canvas id="shadow-canvas"></canvas>
       <img src="me.jfif" alt="Татьяна Мосолова" class="profile-photo">
       <h1>Татьяна Мосолова</h1>
       <p class="subtitle">Frontend Developer</p>
-    </div>
-  </header>
+    </header>
 
-  <div class="container">
     <section>
       <h2>Контакты</h2>
       <div class="contacts">

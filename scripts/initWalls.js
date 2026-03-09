@@ -58,74 +58,18 @@ export function initWalls(scene, roomWidth, roomHeight, roomDepth) {
 }
 
 export function initBall(scene, roomWidth, roomHeight, roomDepth) {
-  // Семейство шариков в комнате: стеклянные неоновые, тёплый металл и мягкий матовый
-  const largeSphereGeometry = new THREE.SphereGeometry(26, 28, 28);
-  const smallSphereGeometry = new THREE.SphereGeometry(20, 24, 24);
-
-  const glassNeonMaterial = new THREE.MeshStandardMaterial({
-    color: 0x38bdf8,
-    emissive: 0x0ea5e9,
-    emissiveIntensity: 0.7,
-    roughness: 0.12,
-    metalness: 0.95,
-    transparent: true,
-    opacity: 0.88
+  // Белый шарик в центре комнаты
+  const ballGeometry = new THREE.SphereGeometry(25, 22, 22);
+  const ballMaterial = new THREE.MeshStandardMaterial({
+    color: 0xf9da88,
+    roughness: 0.3,
+    metalness: 0.1
   });
-
-  const metalWarmMaterial = new THREE.MeshStandardMaterial({
-    color: 0xfbbf24,        // тёплый золотистый
-    emissive: 0x78350f,
-    emissiveIntensity: 0.3,
-    roughness: 0.28,
-    metalness: 0.9
-  });
-
-  const softMatteMaterial = new THREE.MeshStandardMaterial({
-    color: 0xa855f7,        // мягкий фиолетовый акцент
-    emissive: 0x4c1d95,
-    emissiveIntensity: 0.35,
-    roughness: 0.65,
-    metalness: 0.18
-  });
-
-  const ballConfigs = [
-    {
-      geometry: largeSphereGeometry,
-      material: glassNeonMaterial,
-      position: [roomWidth * 0.32, roomHeight * 0.14, -roomDepth * 0.62]
-    },
-    {
-      geometry: smallSphereGeometry,
-      material: metalWarmMaterial,
-      position: [roomWidth * 0.28, -roomHeight * 0.2, -roomDepth * 0.76]
-    },
-    {
-      geometry: largeSphereGeometry,
-      material: softMatteMaterial,
-      position: [-roomWidth * 0.22, 0, -roomDepth * 0.7]
-    },
-    {
-      geometry: smallSphereGeometry,
-      material: glassNeonMaterial,
-      position: [-roomWidth * 0.3, -roomHeight * 0.16, -roomDepth * 0.56]
-    }
-  ];
-
-  const balls = [];
-
-  for (let i = 0; i < ballConfigs.length; i++) {
-    const cfg = ballConfigs[i];
-    const ball = new THREE.Mesh(cfg.geometry, cfg.material);
-    ball.position.set(cfg.position[0], cfg.position[1], cfg.position[2]);
-    ball.castShadow = true;
-    ball.receiveShadow = true;
-    ball.userData.basePosition = ball.position.clone();
-    ball.userData.index = i;
-    scene.add(ball);
-    balls.push(ball);
-  }
-
-  return balls;
+  const centerBall = new THREE.Mesh(ballGeometry, ballMaterial);
+  centerBall.position.set(roomWidth * 0.4, 0, -roomDepth * 0.75); // сдвиг x,y,z (вправо, вверх, вблизь при + значениях). значение 0.5 по x значит запечататься в стену
+  centerBall.castShadow = true;
+  centerBall.receiveShadow = true;
+  scene.add(centerBall);
 }
 
 export function initAmbientLight(scene) {
