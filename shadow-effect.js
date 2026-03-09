@@ -50,9 +50,6 @@
       return;
     }
 
-    fetch('http://127.0.0.1:7242/ingest/0d3828e4-3326-41aa-9e48-f35ccc0bc97e', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ location: 'shadow-effect.js:46', message: 'Вызов initThreeScene', data: { threeType: typeof THREE }, timestamp: Date.now(), runId: 'init', hypothesisId: 'D' }) }).catch(() => { });
-    // #endregion
-
     // Продолжаем инициализацию
     initThreeScene();
   });
