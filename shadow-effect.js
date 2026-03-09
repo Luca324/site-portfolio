@@ -126,32 +126,50 @@
       const roomHeight = header.getBoundingClientRect().height;
       const roomDepth = 150;
       
-      // Материал для стен - темный и полупрозрачный
+      // Материал для стен - нейтральный светло-серый
       const wallMaterial = new THREE.MeshStandardMaterial({
-        color: 0xffffff,
+        color: 0xe8e8e8,      // нейтральный светло-серый
         transparent: true,
-        opacity: 0.3,
-        roughness: 0.8,        // шероховатость дает матовый эффект
-        metalness: 0
+        opacity: 0.85,
+        roughness: 0.7,
+        metalness: 0.1
     });
 
-    const specialMaterial1 = new THREE.MeshStandardMaterial({
-      color: 0xff88aa,      // розовый оттенок
+    // Материал для пола - темно-серый с легким блеском (полированный бетон)
+    const floorMaterial = new THREE.MeshStandardMaterial({
+      color: 0x2a2a2a,      // темно-серый, почти черный
       transparent: true,
-      opacity: 0.8,
-      emissive: 0x331122    // легкое свечение
+      opacity: 0.9,
+      roughness: 0.3,       // более гладкий для эффекта полировки
+      metalness: 0.2        // легкий металлический оттенок
   });
-  const specialMaterial2 = new THREE.MeshStandardMaterial({
-    color: 0x4488fa,      // синий
+  
+  // Материал для потолка - светло-кремовый
+  const ceilingMaterial = new THREE.MeshStandardMaterial({
+    color: 0xf5f5f0,      // светло-кремовый, почти белый
     transparent: true,
-    opacity: 0.8,
-    emissive: 0x331122    // легкое свечение
+    opacity: 0.9,
+    roughness: 0.8,
+    metalness: 0
 });
-  const specialMaterial3 = new THREE.MeshStandardMaterial({
-    color: 0x44cc88,      // зелёный/бирюзовый
+
+  // Материал для акцентной стены - глубокий синий
+  const accentWallMaterial = new THREE.MeshStandardMaterial({
+    color: 0x1e3a5f,      // глубокий синий
     transparent: true,
-    opacity: 0.8,
-    emissive: 0x112233
+    opacity: 0.9,
+    roughness: 0.6,
+    metalness: 0.05,
+    emissive: 0x050810    // очень легкое свечение
+});
+
+  // Материал для нейтральных стен
+  const neutralWallMaterial = new THREE.MeshStandardMaterial({
+    color: 0xd0d0d0,      // нейтральный серый
+    transparent: true,
+    opacity: 0.85,
+    roughness: 0.7,
+    metalness: 0.1
 });
       
       // --- Параметры зеркала (вертикальная плоскость x = mirrorPlaneX) ---
@@ -183,59 +201,52 @@
         side: THREE.DoubleSide
       });
       
-      // Пол
+      // Пол - темно-серый полированный
       const floorGeometry = new THREE.PlaneGeometry(roomWidth, roomDepth);
-      const floor = new THREE.Mesh(floorGeometry, specialMaterial1);
+      const floor = new THREE.Mesh(floorGeometry, floorMaterial);
       floor.rotation.x = -Math.PI / 2;
       floor.position.y = -roomHeight / 2;
       floor.position.z = -roomDepth / 2;
       scene.add(floor);
       
-      // Потолок
+      // Потолок - светло-кремовый
       const ceilingGeometry = new THREE.PlaneGeometry(roomWidth, roomDepth);
-      const ceiling = new THREE.Mesh(ceilingGeometry, wallMaterial);
+      const ceiling = new THREE.Mesh(ceilingGeometry, ceilingMaterial);
       ceiling.rotation.x = Math.PI / 2;
       ceiling.position.y = roomHeight / 2;
       ceiling.position.z = -roomDepth / 2;
       scene.add(ceiling);
       
-      // Левая стена
+      // Левая стена - нейтральный серый
       const leftWallGeometry = new THREE.PlaneGeometry(roomDepth, roomHeight);
-      const leftWall = new THREE.Mesh(leftWallGeometry, specialMaterial2);
+      const leftWall = new THREE.Mesh(leftWallGeometry, neutralWallMaterial);
       leftWall.rotation.y = Math.PI / 2;
       leftWall.position.x = -roomWidth / 2;
       leftWall.position.z = -(roomDepth / 2);
       scene.add(leftWall);
       
-      // Правая стена — цветная (бирюзовая)
+      // Правая стена — акцентная (глубокий синий)
       const rightWallGeometry = new THREE.PlaneGeometry(roomDepth, roomHeight);
-      const rightWall = new THREE.Mesh(rightWallGeometry, specialMaterial3);
+      const rightWall = new THREE.Mesh(rightWallGeometry, accentWallMaterial);
       rightWall.rotation.y = -Math.PI / 2;
       rightWall.position.x = roomWidth / 2;
       rightWall.position.z = -roomDepth / 2;
       scene.add(rightWall);
       
-      // Задняя стена — обычная (полупрозрачная)
+      // Задняя стена — нейтральный светло-серый
       const backWallGeometry = new THREE.PlaneGeometry(roomWidth, roomHeight);
       const backWall = new THREE.Mesh(backWallGeometry, wallMaterial);
       backWall.position.z = -roomDepth;
       scene.add(backWall);
       
-      // Передняя стена — за камерой (z > 200), смотрит в сторону комнаты
+      // Передняя стена — нейтральный серый
       const frontWallGeometry = new THREE.PlaneGeometry(roomWidth, roomHeight);
-      const frontWall = new THREE.Mesh(frontWallGeometry, specialMaterial3);
+      const frontWall = new THREE.Mesh(frontWallGeometry, neutralWallMaterial);
       frontWall.position.z = 250;   // за камерой (камера на z=200)
       frontWall.rotation.y = Math.PI; // грань смотрит в сторону -Z (к камере и комнате)
       frontWall.receiveShadow = true;
       scene.add(frontWall);
 
-
-      // Зеркало (вертикальная плоскость, отражает сцену)
-      const justMirrorGeometry = new THREE.PlaneGeometry(mirrorWidth, mirrorHeight);
-      const justMirror = new THREE.Mesh(justMirrorGeometry, justMirrorMaterial);
-      justMirror.rotation.y = -Math.PI / 2;
-      justMirror.position.set(mirrorPlaneX, mirrorPlaneY, mirrorPlaneZ);
-      scene.add(justMirror);
       
       // Белый шарик в центре комнаты
       const ballGeometry = new THREE.SphereGeometry(25, 22, 22);
@@ -245,10 +256,19 @@
         metalness: 0.1
       });
       const centerBall = new THREE.Mesh(ballGeometry, ballMaterial);
-      centerBall.position.set(roomWidth/4 , 0, -roomDepth/2);
+      centerBall.position.set(roomWidth*0.5 , 0, -roomDepth*0.75); // сдвиг x,y,z (вправо, вверх, вблизь при + значениях). значение 0.5 по x значит запечататься в стену
       centerBall.castShadow = true;
       centerBall.receiveShadow = true;
       scene.add(centerBall);
+      
+      
+
+      // Зеркало (вертикальная плоскость, отражает сцену)
+      const justMirrorGeometry = new THREE.PlaneGeometry(mirrorWidth, mirrorHeight);
+      const justMirror = new THREE.Mesh(justMirrorGeometry, justMirrorMaterial);
+      justMirror.rotation.y = -Math.PI / 2;
+      justMirror.position.set(mirrorPlaneX, mirrorPlaneY, mirrorPlaneZ);
+      scene.add(justMirror);
       
       // Настройка камеры
       camera.position.set(0, 0, 200);
@@ -380,8 +400,8 @@
         // Зеркало: отражение относительно плоскости x = mirrorPlaneX
         justMirrorCamera.position.x = 2 * mirrorPlaneX - camera.position.x;
         justMirrorCamera.position.y = camera.position.y;
-        justMirrorCamera.position.z = camera.position.z;
-        justMirrorCamera.lookAt(2 * mirrorPlaneX, mirrorPlaneY, mirrorPlaneZ);
+        justMirrorCamera.position.z = -camera.position.z;// вот тут надо походу z отрицательным
+        justMirrorCamera.lookAt(2 * mirrorPlaneX, mirrorPlaneY, mirrorPlaneZ); 
         justMirrorCamera.updateMatrixWorld(true);
         
         justMirror.visible = false;
