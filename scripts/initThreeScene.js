@@ -1,5 +1,5 @@
 import { initWalls, initBall, initAmbientLight } from "./initWalls.js";
-const roomDepth = 350;
+const roomDepth = 400;
 // Выбор варианта материала зеркала (1–5)
 const MIRROR_MATERIAL_VARIANT = 2;
 
@@ -8,7 +8,8 @@ const scene = new THREE.Scene();
 scene.background = null; // Прозрачный фон
 
 // Обработчик движения мыши
-const cursorLight = new THREE.PointLight(0xffffff, 4);
+// Лёгкий сдвиг в сторону акцентного синего (#2563eb)
+const cursorLight = new THREE.PointLight(0x4f9efc, 4);
 let mouseX = 0;
 let mouseY = 0;
 let mousemoveCount = 0;
@@ -40,7 +41,7 @@ export function initThreeScene(canvas, header) {
     const { roomWidth, roomHeight } = getSizes(header)
 
     initWalls(scene, roomWidth, roomHeight, roomDepth)
-    initBall(scene, roomWidth, roomHeight, roomDepth)
+    const balls = initBall(scene, roomWidth, roomHeight, roomDepth)
     initAmbientLight(scene)
     addCursorLight(scene, roomWidth, roomHeight)
     initMirror(scene, header);
@@ -63,7 +64,7 @@ export function initThreeScene(canvas, header) {
 
 
     // Запускаем анимацию
-    animate(objects);
+    animate(objects, balls);
 
   } catch (error) {
     console.error('Ошибка инициализации shadow effect:', error);
@@ -71,7 +72,7 @@ export function initThreeScene(canvas, header) {
 
 
 
-  function animate(objects) {
+  function animate(objects, balls) {
     requestAnimationFrame(animate);
 
     // Синхронизируем прокси-объекты с HTML каждый кадр
@@ -80,6 +81,25 @@ export function initThreeScene(canvas, header) {
     // Обновляем позицию курсорного света с учётом актуальных размеров хедера
     const { roomWidth, roomHeight } = getSizes(header);
     updateLightPosition(roomWidth, roomHeight);
+
+    // Лёгкое парение и вращение шариков
+    if (Array.isArray(balls) && balls.length > 0) {
+      const time = performance.now() * 0.001;
+
+      for (let i = 0; i < balls.length; i++) {
+        const ball = balls[i];
+        const base = ball.userData.basePosition || ball.position;
+        const phase = i * Math.PI / 3;
+        const floatAmplitude = 6 + i * 1.5;
+        const floatSpeed = 0.7 + i * 0.2;
+
+        ball.position.y = base.y + Math.sin(time * floatSpeed + phase) * floatAmplitude;
+        ball.position.x = base.x + Math.cos(time * 0.35 + phase) * 2;
+
+        ball.rotation.y += 0.004 + i * 0.0015;
+        ball.rotation.x += 0.002 + i * 0.001;
+      }
+    }
 
     const sizes = getSizes(header);
     renderMirror(scene, sizes);
