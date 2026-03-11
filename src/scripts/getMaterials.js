@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 export function getMaterials() {
 
     // Материал для стен - нейтральный светло-серый

@@ -1,4 +1,4 @@
-(function () {
+export default function projectSort() {
   // Здесь можно задать человекочитаемую дату и порядок для сортировки.
   // Чем больше order, тем проект новее.
   const projectsMeta = {
@@ -105,5 +105,5 @@
       list.appendChild(item.element);
     });
   });
-})();
+};
 

@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 import { getMaterials } from "./getMaterials.js";
 export function initWalls(scene, roomWidth, roomHeight, roomDepth) {
   const { wallMaterial, neutralWallMaterial, accentWallMaterial, ceilingMaterial, floorMaterial } = getMaterials()

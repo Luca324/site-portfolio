@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 import { initWalls, initBall, initAmbientLight } from "./initWalls.js";
 const roomDepth = 150;
 // Выбор варианта материала зеркала (1–5)
