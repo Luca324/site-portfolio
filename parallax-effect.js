@@ -1,7 +1,7 @@
 // Parallax эффект при наведении на изображения проектов
 (function() {
   const projectImages = document.querySelectorAll('.project-image');
-  const maxAngle = 15; // Максимальный угол поворота в градусах
+  const maxAngle = 5; // Максимальный угол поворота в градусах
   const perspective = 1000; // Глубина перспективы
 
   projectImages.forEach(function(image) {

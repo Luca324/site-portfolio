@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,7 +30,9 @@
     header {
       position: relative;
       text-align: center;
+      padding-top: 30px;
       padding-bottom: 30px;
+      margin-bottom: 30px;
     }
 
     #shadow-canvas {
@@ -53,12 +56,15 @@
       font-size: 36px;
       font-weight: 600;
       margin-bottom: 10px;
+    }
+
+    .title {
       color: #1a1a1a;
     }
 
     .subtitle {
       font-size: 18px;
-      color: #666;
+      color: #fff;
       font-weight: 400;
     }
 
@@ -69,7 +75,7 @@
       object-fit: cover;
       margin: 0 auto 20px;
       display: block;
-      border: 3px solid #e0e0e0;
+      /* border: 3px solid #e0e0e0; */
     }
 
     section {
@@ -226,6 +232,12 @@
       font-size: 14px;
     }
 
+    @media (prefers-color-scheme: dark) {
+      .title {
+        color: #1a1a1a;
+      }
+    }
+
     @media (max-width: 768px) {
       .container {
         padding: 40px 15px;
@@ -250,11 +262,12 @@
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <header>
       <canvas id="shadow-canvas"></canvas>
-      <img src="me.jfif" alt="Татьяна Мосолова" class="profile-photo">
+      <img src="images/me.jfif" alt="Татьяна Мосолова" class="profile-photo">
       <h1>Татьяна Мосолова</h1>
       <p class="subtitle">Frontend Developer</p>
     </header>
@@ -293,11 +306,11 @@
             </a>
           </div>
           <div class="project-description">
-            Сайт норвежского интернет-магазина компьютеров и комплектующих. 
+            Сайт норвежского интернет-магазина компьютеров и комплектующих.
             <a href="https://buildmeister.no" target="_blank">Посмотреть сайт</a>
           </div>
           <div class="project-image-wrapper">
-            <img src="buildmeister.png" alt="BuildMeister" class="project-image">
+            <img src="images/buildmeister.png" alt="BuildMeister" class="project-image">
           </div>
         </li>
 
@@ -308,7 +321,8 @@
             </a>
           </div>
           <div class="project-description">
-            Кейс-чемпионат «Расти в IT!». Кейс от Ростелеком: Умный склад - система управления складской логистикой с использованием автономных роботов.
+            Кейс-чемпионат «Расти в IT!». Кейс от Ростелеком: Умный склад - система управления складской логистикой с
+            использованием автономных роботов.
             <a href="https://disk.yandex.ru/i/un1vq04TcxQJpA" target="_blank">Посмотреть демо</a>
           </div>
           <div class="project-image-wrapper">
@@ -319,11 +333,12 @@
         <li class="project-item" data-project-id="myn-mn-calculation">
           <div class="project-title">
             <a href="https://github.com/Luca324/MYN-MN-calculation" target="_blank">
-              <img src="images/GitHub_Invertocat_Black_Clearspace.svg" alt="" class="project-github-icon">MYN-MN-calculation
+              <img src="images/GitHub_Invertocat_Black_Clearspace.svg" alt=""
+                class="project-github-icon">MYN-MN-calculation
             </a>
           </div>
           <div class="project-description">
-            Сайт-калькулятор, который рассчитывает электрические токи по методам МУН и МН. 
+            Сайт-калькулятор, который рассчитывает электрические токи по методам МУН и МН.
             <a href="https://tatyana.rsars.ru/calculator/index.html" target="_blank">Посмотреть сайт</a>
           </div>
           <div class="project-image-wrapper">
@@ -334,11 +349,12 @@
         <li class="project-item" data-project-id="physics-site-calculator">
           <div class="project-title">
             <a href="https://github.com/Luca324/PhysicsSiteCalculator" target="_blank">
-              <img src="images/GitHub_Invertocat_Black_Clearspace.svg" alt="" class="project-github-icon">PhysicsSiteCalculator
+              <img src="images/GitHub_Invertocat_Black_Clearspace.svg" alt=""
+                class="project-github-icon">PhysicsSiteCalculator
             </a>
           </div>
           <div class="project-description">
-            Сайт, который решает задачки по физике. 
+            Сайт, который решает задачки по физике.
             <a href="https://tatyana.rsars.ru/physics/index.html" target="_blank">Посмотреть сайт</a>
           </div>
           <div class="project-image-wrapper">
@@ -359,11 +375,12 @@
             <img src="images/2 screens light.png" alt="Plan It" class="project-image">
           </div>
         </li>
-        
+
         <li class="project-item" data-project-id="analytics-service">
           <div class="project-title">
             <a href="https://github.com/Luca324/Analytics-service" target="_blank">
-              <img src="images/GitHub_Invertocat_Black_Clearspace.svg" alt="" class="project-github-icon">Analytics-service
+              <img src="images/GitHub_Invertocat_Black_Clearspace.svg" alt=""
+                class="project-github-icon">Analytics-service
             </a>
           </div>
           <div class="project-description">
@@ -405,11 +422,15 @@
         <li class="project-item" data-project-id="shri-infra-homework-2025">
           <div class="project-title">
             <a href="https://github.com/Luca324/shri-infra-homework-2025" target="_blank">
-              <img src="images/GitHub_Invertocat_Black_Clearspace.svg" alt="" class="project-github-icon">shri-infra-homework-2025
+              <img src="images/GitHub_Invertocat_Black_Clearspace.svg" alt=""
+                class="project-github-icon">shri-infra-homework-2025
             </a>
           </div>
           <div class="project-description">
-            Проект содержит GitHub Actions workflow, которые автоматизируют весь жизненный цикл релизов: при релизе автоматически создает GitHub Issue с полной информацией, при багфиксе находит соответствующее issue и добавляет комментарий, автоматически обновляет CHANGELOG, управляет Docker образами в Yandex Container Registry, деплоит в продакшн через SSH и многое другое.
+            Проект содержит GitHub Actions workflow, которые автоматизируют весь жизненный цикл релизов: при релизе
+            автоматически создает GitHub Issue с полной информацией, при багфиксе находит соответствующее issue и
+            добавляет комментарий, автоматически обновляет CHANGELOG, управляет Docker образами в Yandex Container
+            Registry, деплоит в продакшн через SSH и многое другое.
           </div>
           <div class="project-image-wrapper">
             <img src="images/github-actions-workflow.png" alt="GitHub Actions workflow" class="project-image">
@@ -420,7 +441,8 @@
     </section>
 
     <footer>
-      <p>Хостинг предоставлен <a href="https://rsars.ru/" target="_blank" style="color: #2563eb; text-decoration: none;">rsars.ru</a></p>
+      <p>Хостинг предоставлен <a href="https://rsars.ru/" target="_blank"
+          style="color: #2563eb; text-decoration: none;">rsars.ru</a></p>
     </footer>
   </div>
 
@@ -429,4 +451,5 @@
   <script type="module" src="shadow-effect.js"></script>
 
 </body>
+
 </html>

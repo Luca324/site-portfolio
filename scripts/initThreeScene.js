@@ -40,7 +40,7 @@ export function initThreeScene(canvas, header) {
     const { roomWidth, roomHeight } = getSizes(header)
 
     initWalls(scene, roomWidth, roomHeight, roomDepth)
-    initBall(scene, roomWidth, roomHeight, roomDepth)
+    // initBall(scene, roomWidth, roomHeight, roomDepth)
     initAmbientLight(scene)
     addCursorLight(scene, roomWidth, roomHeight)
     initMirror(scene, header);
@@ -371,7 +371,7 @@ function init3DObjects(scene, header) {
   scene.add(photoSphere);
 
   const nameBox = new THREE.Mesh(
-    new THREE.BoxGeometry(200, 40, 10),
+    new THREE.BoxGeometry(200, 30, 10),
     shadowMaterial.clone()
   );
   nameBox.castShadow = true;
@@ -379,7 +379,7 @@ function init3DObjects(scene, header) {
   scene.add(nameBox);
 
   const subtitleBox = new THREE.Mesh(
-    new THREE.BoxGeometry(150, 25, 10),
+    new THREE.BoxGeometry(150, 15, 10),
     shadowMaterial.clone()
   );
   subtitleBox.castShadow = true;
