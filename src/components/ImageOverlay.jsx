@@ -5,16 +5,16 @@ import ArrowIcon from './ArrowIcon.jsx'
 import css from './ImageOverlay.module.css'
 
 export default function ImageOverlay({ images, alt, index, onIndexChange, onClose }) {
-  const hasMany = images.length > 1
+    const hasMany = images.length > 1
 
-  useEffect(() => bindOverlayControls({
-    index,
-    length: images.length,
-    onIndexChange,
-    onClose,
-  }), [images.length, index, onClose, onIndexChange])
+    useEffect(() => bindOverlayControls({
+        index,
+        length: images.length,
+        onIndexChange,
+        onClose,
+    }), [images.length, index, onClose, onIndexChange])
 
-  return (
+    return (
     <div className={css.overlay} onClick={onClose} role="dialog" aria-modal="true" aria-label={alt}>
       <button type="button" className={css.close} aria-label="Закрыть" onClick={onClose}>
         ×
@@ -29,7 +29,7 @@ export default function ImageOverlay({ images, alt, index, onIndexChange, onClos
         <div className={css.nav}>
           <button
             type="button"
-            className={`${styles.arrow} ${styles.arrowPrev}`}
+            className={`${css.arrow} ${css.arrowPrev}`}
             aria-label="Предыдущее фото"
             onClick={(event) => stopAndRun(event, () => onIndexChange(shiftIndex(index, -1, images.length)))}
           >
@@ -37,7 +37,7 @@ export default function ImageOverlay({ images, alt, index, onIndexChange, onClos
           </button>
           <button
             type="button"
-            className={`${styles.arrow} ${styles.arrowNext}`}
+            className={`${css.arrow} ${css.arrowNext}`}
             aria-label="Следующее фото"
             onClick={(event) => stopAndRun(event, () => onIndexChange(shiftIndex(index, 1, images.length)))}
           >
@@ -46,5 +46,5 @@ export default function ImageOverlay({ images, alt, index, onIndexChange, onClos
         </div>
       ) : null}
     </div>
-  )
+    )
 }

@@ -8,14 +8,15 @@ import css from './ProjectCard.module.css'
 const GITHUB_ICON = 'GitHub_Invertocat_Black_Clearspace.svg'
 
 export default function ProjectCard({ project }) {
-  const images = project.images
-  const frameRef = useRef(null)
-  const frameHeight = useCarouselFrameHeight(images, frameRef)
-  const [index, setIndex] = useState(0)
-  const [open, setOpen] = useState(false)
-  const hasMany = images.length > 1
+    const images = project.images
+    const frameRef = useRef(null)
+    const frameHeight = useCarouselFrameHeight(images, frameRef)
+    const [index, setIndex] = useState(0)
+    const [open, setOpen] = useState(false)
+    const hasMany = images.length > 1
 
-  return (
+
+    return (
     <li className={css.item} data-project-id={project.id}>
       <div className={css.title}>
         <a href={project.github} target="_blank">
@@ -23,11 +24,14 @@ export default function ProjectCard({ project }) {
           {project.title}
         </a>
       </div>
+
       <div className={css.description}>{project.description}</div>
+
       {project.date ? <div className={css.date}>{project.date}</div> : null}
+	  
       <div className={css.carousel}>
         {hasMany ? (
-          <button type="button" className={`${styles.sideButton} ${styles.sideButtonPrev}`} aria-label="Предыдущее фото" onClick={() => setIndex((current) => shiftIndex(current, -1, images.length))}>
+          <button type="button" className={`${css.sideButton} ${css.sideButtonPrev}`} aria-label="Предыдущее фото" onClick={() => setIndex((current) => shiftIndex(current, -1, images.length))}>
             <ArrowIcon className={css.pointLeft} />
           </button>
         ) : null}
@@ -44,7 +48,7 @@ export default function ProjectCard({ project }) {
           />
         </div>
         {hasMany ? (
-          <button type="button" className={`${styles.sideButton} ${styles.sideButtonNext}`} aria-label="Следующее фото" onClick={() => setIndex((current) => shiftIndex(current, 1, images.length))}>
+          <button type="button" className={`${css.sideButton} ${css.sideButtonNext}`} aria-label="Следующее фото" onClick={() => setIndex((current) => shiftIndex(current, 1, images.length))}>
             <ArrowIcon />
           </button>
         ) : null}
@@ -59,5 +63,5 @@ export default function ProjectCard({ project }) {
         />
       ) : null}
     </li>
-  )
+    )
 }

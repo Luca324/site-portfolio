@@ -5,12 +5,12 @@ import Footer from './components/Footer.jsx'
 import css from './App.module.css'
 
 export default function App() {
-  return (
+    return (
     <div className={css.container}>
       <Header />
       <Contacts />
       <Projects />
       <Footer />
     </div>
-  )
+    )
 }

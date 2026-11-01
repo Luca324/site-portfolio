@@ -1,7 +1,7 @@
 import css from './Contacts.module.css'
 
 export default function Contacts() {
-  return (
+    return (
     <section className={css.section}>
       <h2 className={css.heading}>Контакты</h2>
       <div className={css.list}>
@@ -17,5 +17,5 @@ export default function Contacts() {
       </div>
       <a href="https://disk.yandex.ru/i/v1aJ0SkVuxjdvw" target="_blank" className={css.resume}>Скачать резюме</a>
     </section>
-  )
+    )
 }

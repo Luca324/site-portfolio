@@ -4,35 +4,36 @@ import ProjectCard from './ProjectCard.jsx'
 import css from './Projects.module.css'
 
 export default function Projects() {
-  const [sort, setSort] = useState('default')
+    const [sort, setSort] = useState('default')
 
-  const sorted = useMemo(() => {
-    const items = projects.map((project, index) => ({ project, index }))
+    const sorted = useMemo(() => {
+        const items = projects.map((project, index) => ({ project, index }))
 
-    if (sort === 'default') {
-      items.sort((a, b) => a.index - b.index)
-      return items
-    }
+        if (sort === 'default') {
+            items.sort((a, b) => a.index - b.index)
 
-    items.sort((a, b) => {
-      const orderA = typeof a.project.order === 'number' ? a.project.order : 0
-      const orderB = typeof b.project.order === 'number' ? b.project.order : 0
+            return items
+        }
 
-      if (sort === 'newest') {
-        return orderB - orderA
-      }
+        items.sort((a, b) => {
+            const orderA = typeof a.project.order === 'number' ? a.project.order : 0
+            const orderB = typeof b.project.order === 'number' ? b.project.order : 0
 
-      if (sort === 'oldest') {
-        return orderA - orderB
-      }
+            if (sort === 'newest') {
+                return orderB - orderA
+            }
 
-      return 0
-    })
+            if (sort === 'oldest') {
+                return orderA - orderB
+            }
 
-    return items
-  }, [sort])
+            return 0
+        })
 
-  return (
+        return items
+    }, [sort])
+
+    return (
     <section className={css.section}>
       <h2 className={css.heading}>Проекты</h2>
       <div className={css.filter}>
@@ -49,5 +50,5 @@ export default function Projects() {
         ))}
       </ul>
     </section>
-  )
+    )
 }
