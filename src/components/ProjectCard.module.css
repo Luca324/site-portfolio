@@ -1,0 +1,138 @@
+.item {
+  margin-bottom: 30px;
+  padding-bottom: 25px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.item:last-child {
+  border-bottom: none;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #1a1a1a;
+}
+
+.title a {
+  color: #2563eb;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.title a:hover {
+  color: #1e40af;
+  text-decoration: underline;
+}
+
+.githubIcon {
+  width: 24px;
+  height: 24px;
+  margin-right: 6px;
+  vertical-align: text-bottom;
+}
+
+.description {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.7;
+}
+
+.description a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.description a:hover {
+  text-decoration: underline;
+}
+
+.date {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #777;
+}
+
+.carousel {
+  display: flex;
+  align-items: center;
+  max-width: 800px;
+  margin-top: 20px;
+}
+
+.frame {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image {
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  display: block;
+  cursor: zoom-in;
+}
+
+.sideButton {
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #1a1a1a;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.sideButtonPrev {
+  margin-left: -12px;
+}
+
+.sideButtonNext {
+  margin-right: -12px;
+}
+
+.pointLeft {
+  transform: rotate(180deg);
+}
+
+@media (prefers-color-scheme: dark) {
+  .item {
+    border-bottom-color: #2a2a2a;
+  }
+
+  .title {
+    color: #f2f2f2;
+  }
+
+  .description {
+    color: #c5c5c5;
+  }
+
+  .date {
+    color: #999999;
+  }
+
+  .image {
+    border-color: #333333;
+  }
+
+  .sideButton {
+    color: #ffffff;
+  }
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 18px;
+  }
+}

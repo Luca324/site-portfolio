@@ -1,0 +1,49 @@
+.root {
+  text-align: center;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  margin-bottom: 30px;
+}
+
+.title {
+  font-size: 36px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #1a1a1a;
+}
+
+.subtitle {
+  font-size: 18px;
+  color: #555;
+  font-weight: 400;
+}
+
+.photo {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 20px;
+  display: block;
+}
+
+@media (prefers-color-scheme: dark) {
+  .title {
+    color: #f2f2f2;
+  }
+
+  .subtitle {
+    color: #b5b5b5;
+  }
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 28px;
+  }
+
+  .photo {
+    width: 120px;
+    height: 120px;
+  }
+}

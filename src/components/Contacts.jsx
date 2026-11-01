@@ -1,19 +1,21 @@
+import css from './Contacts.module.css'
+
 export default function Contacts() {
   return (
-    <section>
-      <h2>Контакты</h2>
-      <div className="contacts">
-        <div className="contact-item">
+    <section className={css.section}>
+      <h2 className={css.heading}>Контакты</h2>
+      <div className={css.list}>
+        <div className={css.item}>
           <a href="https://habr.com/ru/users/Luca324/" target="_blank">Habr</a>
         </div>
-        <div className="contact-item">
+        <div className={css.item}>
           <a href="https://t.me/ppkk134" target="_blank">Telegram</a>
         </div>
-        <div className="contact-item">
+        <div className={css.item}>
           <a href="https://github.com/Luca324" target="_blank">GitHub</a>
         </div>
       </div>
-      <a href="https://disk.yandex.ru/i/v1aJ0SkVuxjdvw" target="_blank" className="resume-link">Скачать резюме</a>
+      <a href="https://disk.yandex.ru/i/v1aJ0SkVuxjdvw" target="_blank" className={css.resume}>Скачать резюме</a>
     </section>
   )
 }

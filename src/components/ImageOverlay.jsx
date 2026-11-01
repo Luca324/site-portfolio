@@ -1,77 +1,47 @@
 import { useEffect } from 'react'
 import { assetUrl } from '../assetUrl.js'
-
-function neighbor(index, delta, length) {
-  return (index + delta + length) % length
-}
+import { bindOverlayControls, shiftIndex, stopAndRun } from '../utils/carousel.js'
+import ArrowIcon from './ArrowIcon.jsx'
+import css from './ImageOverlay.module.css'
 
 export default function ImageOverlay({ images, alt, index, onIndexChange, onClose }) {
   const hasMany = images.length > 1
 
-  useEffect(() => {
-    const previousOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-
-    function onKeyDown(event) {
-      if (event.key === 'Escape') {
-        onClose()
-      }
-
-      if (!hasMany) {
-        return
-      }
-
-      if (event.key === 'ArrowLeft') {
-        onIndexChange(neighbor(index, -1, images.length))
-      }
-
-      if (event.key === 'ArrowRight') {
-        onIndexChange(neighbor(index, 1, images.length))
-      }
-    }
-
-    window.addEventListener('keydown', onKeyDown)
-
-    return () => {
-      document.body.style.overflow = previousOverflow
-      window.removeEventListener('keydown', onKeyDown)
-    }
-  }, [hasMany, images.length, index, onClose, onIndexChange])
+  useEffect(() => bindOverlayControls({
+    index,
+    length: images.length,
+    onIndexChange,
+    onClose,
+  }), [images.length, index, onClose, onIndexChange])
 
   return (
-    <div className="image-overlay" onClick={onClose} role="dialog" aria-modal="true" aria-label={alt}>
-      <button type="button" className="image-overlay-close" aria-label="Закрыть" onClick={onClose}>
+    <div className={css.overlay} onClick={onClose} role="dialog" aria-modal="true" aria-label={alt}>
+      <button type="button" className={css.close} aria-label="Закрыть" onClick={onClose}>
         ×
       </button>
       <img
         src={assetUrl(images[index])}
         alt={alt}
-        className="image-overlay-picture"
+        className={css.picture}
         onClick={(event) => event.stopPropagation()}
       />
       {hasMany ? (
-        <div className="image-overlay-nav">
+        <div className={css.nav}>
           <button
             type="button"
-            className="image-overlay-arrow"
+            className={`${styles.arrow} ${styles.arrowPrev}`}
             aria-label="Предыдущее фото"
-            onClick={(event) => {
-              event.stopPropagation()
-              onIndexChange(neighbor(index, -1, images.length))
-            }}
+            onClick={(event) => stopAndRun(event, () => onIndexChange(shiftIndex(index, -1, images.length)))}
           >
-            ‹
+            <ArrowIcon className={css.pointLeft} />
           </button>
           <button
             type="button"
-            className="image-overlay-arrow"
+            className={`${styles.arrow} ${styles.arrowNext}`}
             aria-label="Следующее фото"
-            onClick={(event) => {
-              event.stopPropagation()
-              onIndexChange(neighbor(index, 1, images.length))
-            }}
+            onClick={(event) => stopAndRun(event, () => onIndexChange(shiftIndex(index, 1, images.length)))}
           >
-            ›
+            <ArrowIcon />
           </button>
         </div>
       ) : null}

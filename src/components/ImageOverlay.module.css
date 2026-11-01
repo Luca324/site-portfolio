@@ -1,0 +1,95 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.82);
+}
+
+.picture {
+  width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  display: block;
+  border-radius: 16px;
+}
+
+.close {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 22;
+  width: 40px;
+  height: 40px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #ffffff;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.nav {
+  display: contents;
+}
+
+.arrow {
+  position: fixed;
+  top: 50%;
+  z-index: 21;
+  width: 48px;
+  height: 48px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #ffffff;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transform: translateY(-50%);
+}
+
+.arrowPrev {
+  left: 16px;
+}
+
+.arrowNext {
+  right: 16px;
+}
+
+.pointLeft {
+  transform: rotate(180deg);
+}
+
+@media (max-width: 720px) {
+  .overlay {
+    flex-direction: column;
+  }
+
+  .picture {
+    width: 100%;
+    max-height: calc(100vh - 88px);
+  }
+
+  .nav {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  .arrow,
+  .arrowPrev,
+  .arrowNext {
+    position: static;
+    top: auto;
+    left: auto;
+    right: auto;
+    transform: none;
+  }
+}

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { projects } from '../data/projects.jsx'
 import ProjectCard from './ProjectCard.jsx'
+import css from './Projects.module.css'
 
 export default function Projects() {
   const [sort, setSort] = useState('default')
@@ -32,9 +33,9 @@ export default function Projects() {
   }, [sort])
 
   return (
-    <section>
-      <h2>Проекты</h2>
-      <div className="projects-filter">
+    <section className={css.section}>
+      <h2 className={css.heading}>Проекты</h2>
+      <div className={css.filter}>
         <span>Сортировать проекты:</span>
         <select id="project-sort" value={sort} onChange={(event) => setSort(event.target.value)}>
           <option value="default">В порядке по умолчанию</option>
@@ -42,7 +43,7 @@ export default function Projects() {
           <option value="oldest">Сначала старые</option>
         </select>
       </div>
-      <ul className="projects-list">
+      <ul className={css.list}>
         {sorted.map(({ project }) => (
           <ProjectCard key={project.id} project={project} />
         ))}

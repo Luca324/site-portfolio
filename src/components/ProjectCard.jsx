@@ -1,60 +1,53 @@
-import { useCallback, useState } from 'react'
+import { useRef, useState } from 'react'
 import { assetUrl } from '../assetUrl.js'
+import { shiftIndex, useCarouselFrameHeight } from '../utils/carousel.js'
+import ArrowIcon from './ArrowIcon.jsx'
 import ImageOverlay from './ImageOverlay.jsx'
+import css from './ProjectCard.module.css'
 
 const GITHUB_ICON = 'GitHub_Invertocat_Black_Clearspace.svg'
 
-function neighbor(index, delta, length) {
-  return (index + delta + length) % length
-}
-
 export default function ProjectCard({ project }) {
   const images = project.images
+  const frameRef = useRef(null)
+  const frameHeight = useCarouselFrameHeight(images, frameRef)
   const [index, setIndex] = useState(0)
   const [open, setOpen] = useState(false)
   const hasMany = images.length > 1
 
-  const showPrevious = useCallback(() => {
-    setIndex((current) => neighbor(current, -1, images.length))
-  }, [images.length])
-
-  const showNext = useCallback(() => {
-    setIndex((current) => neighbor(current, 1, images.length))
-  }, [images.length])
-
-  const closeOverlay = useCallback(() => {
-    setOpen(false)
-  }, [])
-
   return (
-    <li className="project-item" data-project-id={project.id}>
-      <div className="project-title">
+    <li className={css.item} data-project-id={project.id}>
+      <div className={css.title}>
         <a href={project.github} target="_blank">
-          <img src={assetUrl(GITHUB_ICON)} alt="" className="project-github-icon" />
+          <img src={assetUrl(GITHUB_ICON)} alt="" className={css.githubIcon} />
           {project.title}
         </a>
       </div>
-      <div className="project-description">{project.description}</div>
-      {project.date ? <div className="project-date">{project.date}</div> : null}
-      <div className="project-image-wrapper">
-        <div className="project-image-frame">
-          {hasMany ? (
-            <button type="button" className="project-carousel-arrow project-carousel-arrow-prev" aria-label="Предыдущее фото" onClick={showPrevious}>
-              ‹
-            </button>
-          ) : null}
+      <div className={css.description}>{project.description}</div>
+      {project.date ? <div className={css.date}>{project.date}</div> : null}
+      <div className={css.carousel}>
+        {hasMany ? (
+          <button type="button" className={`${styles.sideButton} ${styles.sideButtonPrev}`} aria-label="Предыдущее фото" onClick={() => setIndex((current) => shiftIndex(current, -1, images.length))}>
+            <ArrowIcon className={css.pointLeft} />
+          </button>
+        ) : null}
+        <div
+          className={css.frame}
+          ref={frameRef}
+          style={frameHeight ? { height: frameHeight } : undefined}
+        >
           <img
             src={assetUrl(images[index])}
             alt={project.alt}
-            className="project-image"
+            className={css.image}
             onClick={() => setOpen(true)}
           />
-          {hasMany ? (
-            <button type="button" className="project-carousel-arrow project-carousel-arrow-next" aria-label="Следующее фото" onClick={showNext}>
-              ›
-            </button>
-          ) : null}
         </div>
+        {hasMany ? (
+          <button type="button" className={`${styles.sideButton} ${styles.sideButtonNext}`} aria-label="Следующее фото" onClick={() => setIndex((current) => shiftIndex(current, 1, images.length))}>
+            <ArrowIcon />
+          </button>
+        ) : null}
       </div>
       {open ? (
         <ImageOverlay
@@ -62,7 +55,7 @@ export default function ProjectCard({ project }) {
           alt={project.alt}
           index={index}
           onIndexChange={setIndex}
-          onClose={closeOverlay}
+          onClose={() => setOpen(false)}
         />
       ) : null}
     </li>
