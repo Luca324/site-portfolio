@@ -27,28 +27,10 @@
     }
 
     header {
-      position: relative;
       text-align: center;
       padding-top: 30px;
       padding-bottom: 30px;
       margin-bottom: 30px;
-    }
-
-    #shadow-canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      pointer-events: none;
-    }
-
-    header .profile-photo,
-    header h1,
-    header .subtitle {
-      position: relative;
-      z-index: 1;
     }
 
     h1 {
@@ -63,7 +45,7 @@
 
     .subtitle {
       font-size: 18px;
-      color: #fff;
+      color: #555;
       font-weight: 400;
     }
 
@@ -265,7 +247,6 @@
 <body>
   <div class="container">
     <header>
-      <canvas id="shadow-canvas"></canvas>
       <img src="public/me.jfif" alt="Татьяна Мосолова" class="profile-photo">
       <h1 class="title">Татьяна Мосолова</h1>
       <p class="subtitle">Frontend Developer</p>
