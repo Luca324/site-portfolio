@@ -6,6 +6,7 @@
   align-items: center;
   justify-content: center;
   background: rgba(0, 0, 0, 0.82);
+  touch-action: pan-y;
 }
 
 .picture {

@@ -54,57 +54,6 @@
   color: #777;
 }
 
-.carousel {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  margin-top: 20px;
-}
-
-.frame {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.image {
-  width: 100%;
-  height: auto;
-  border-radius: 16px;
-  border: 1px solid #e0e0e0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  display: block;
-  cursor: zoom-in;
-}
-
-.sideButton {
-  flex: 0 0 36px;
-  width: 36px;
-  height: 36px;
-  margin: 0;
-  padding: 0;
-  border: none;
-  background: transparent;
-  color: #1a1a1a;
-  cursor: pointer;
-  display: grid;
-  place-items: center;
-}
-
-.sideButtonPrev {
-  margin-left: -12px;
-}
-
-.sideButtonNext {
-  margin-right: -12px;
-}
-
-.pointLeft {
-  transform: rotate(180deg);
-}
-
 @media (prefers-color-scheme: dark) {
   .item {
     border-bottom-color: #2a2a2a;
@@ -120,14 +69,6 @@
 
   .date {
     color: #999999;
-  }
-
-  .image {
-    border-color: #333333;
-  }
-
-  .sideButton {
-    color: #ffffff;
   }
 }
 
