@@ -11,7 +11,7 @@ export const projects = [
         <a href="https://www.finn.no/recommerce/seller/1319771041">Finn.no</a>).
       </>
     ),
-    image: 'buildmeister.png',
+    images: ['buildmeister.png', 'analytics.png', 'smartstorage.png'],
     alt: 'BuildMeister',
     date: 'Октябрь 2025 - Февраль 2026',
     order: 100,
@@ -26,7 +26,7 @@ export const projects = [
         <a href="https://disk.yandex.ru/i/un1vq04TcxQJpA" target="_blank">Посмотреть демо</a>
       </>
     ),
-    image: 'smartstorage.png',
+    images: ['smartstorage.png'],
     alt: 'smartstorage',
     date: 'Октябрь 2025',
     order: 95,
@@ -41,7 +41,7 @@ export const projects = [
         <a href="https://tatyana.rsars.ru/calculator/index.html" target="_blank">Посмотреть сайт</a>
       </>
     ),
-    image: 'mynmn.png',
+    images: ['mynmn.png'],
     alt: 'MYN-MN-calculation',
     date: 'Декабрь 2024',
     order: 20,
@@ -56,7 +56,7 @@ export const projects = [
         <a href="https://tatyana.rsars.ru/physics/index.html" target="_blank">Посмотреть сайт</a>
       </>
     ),
-    image: 'physics.png',
+    images: ['physics.png'],
     alt: 'PhysicsSiteCalculator',
     date: 'Май 2024',
     order: 10,
@@ -68,7 +68,7 @@ export const projects = [
     description: (
       <>Мобильное приложение на React Native для заметок и планирования.</>
     ),
-    image: '2 screens light.png',
+    images: ['2 screens light.png'],
     alt: 'Plan It',
     date: 'Сентябрь 2025',
     order: 90,
@@ -80,7 +80,7 @@ export const projects = [
     description: (
       <>Сервис для генерации и аналитики CSV с использованием JS потоков.</>
     ),
-    image: 'analytics.png',
+    images: ['analytics.png'],
     alt: 'Analytics-service',
     date: 'Июль 2025',
     order: 70,
@@ -92,7 +92,7 @@ export const projects = [
     description: (
       <>Платформа для анкетирования.</>
     ),
-    image: 'pollster.png',
+    images: ['pollster.png'],
     alt: 'Pollster',
     date: 'Январь 2025 - Май 2025',
     order: 50,
@@ -104,7 +104,7 @@ export const projects = [
     description: (
       <>Веб-мессенджер на React с десктопной версией на Electron.</>
     ),
-    image: 'flocky.png',
+    images: ['flocky.png'],
     alt: 'FLocky',
     date: 'Июнь 2025',
     order: 60,
@@ -118,7 +118,7 @@ export const projects = [
         Проект содержит GitHub Actions workflow, которые автоматизируют весь жизненный цикл релизов: при релизе автоматически создает GitHub Issue с полной информацией, при багфиксе находит соответствующее issue и добавляет комментарий, автоматически обновляет CHANGELOG, управляет Docker образами в Yandex Container Registry, деплоит в продакшн через SSH и многое другое.
       </>
     ),
-    image: 'github-actions-workflow.png',
+    images: ['github-actions-workflow.png'],
     alt: 'GitHub Actions workflow',
     date: 'Июль 2025',
     order: 80,

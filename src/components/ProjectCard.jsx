@@ -1,29 +1,31 @@
+import { useCallback, useState } from 'react'
 import { assetUrl } from '../assetUrl.js'
+import ImageOverlay from './ImageOverlay.jsx'
 
-const MAX_ANGLE = 5
-const PERSPECTIVE = 1000
 const GITHUB_ICON = 'GitHub_Invertocat_Black_Clearspace.svg'
 
-function tiltImage(event) {
-  const image = event.currentTarget
-  const rect = image.getBoundingClientRect()
-  const mouseX = event.clientX - rect.left
-  const mouseY = event.clientY - rect.top
-  const centerX = rect.width / 2
-  const centerY = rect.height / 2
-  const normalizedX = (mouseX - centerX) / centerX
-  const normalizedY = (mouseY - centerY) / centerY
-  const rotateY = normalizedX * MAX_ANGLE
-  const rotateX = -normalizedY * MAX_ANGLE
-
-  image.style.transform = `perspective(${PERSPECTIVE}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`
-}
-
-function resetImage(event) {
-  event.currentTarget.style.transform = `perspective(${PERSPECTIVE}px) rotateX(0deg) rotateY(0deg)`
+function neighbor(index, delta, length) {
+  return (index + delta + length) % length
 }
 
 export default function ProjectCard({ project }) {
+  const images = project.images
+  const [index, setIndex] = useState(0)
+  const [open, setOpen] = useState(false)
+  const hasMany = images.length > 1
+
+  const showPrevious = useCallback(() => {
+    setIndex((current) => neighbor(current, -1, images.length))
+  }, [images.length])
+
+  const showNext = useCallback(() => {
+    setIndex((current) => neighbor(current, 1, images.length))
+  }, [images.length])
+
+  const closeOverlay = useCallback(() => {
+    setOpen(false)
+  }, [])
+
   return (
     <li className="project-item" data-project-id={project.id}>
       <div className="project-title">
@@ -35,14 +37,34 @@ export default function ProjectCard({ project }) {
       <div className="project-description">{project.description}</div>
       {project.date ? <div className="project-date">{project.date}</div> : null}
       <div className="project-image-wrapper">
-        <img
-          src={assetUrl(project.image)}
-          alt={project.alt}
-          className="project-image"
-          onMouseMove={tiltImage}
-          onMouseLeave={resetImage}
-        />
+        <div className="project-image-frame">
+          {hasMany ? (
+            <button type="button" className="project-carousel-arrow project-carousel-arrow-prev" aria-label="Предыдущее фото" onClick={showPrevious}>
+              ‹
+            </button>
+          ) : null}
+          <img
+            src={assetUrl(images[index])}
+            alt={project.alt}
+            className="project-image"
+            onClick={() => setOpen(true)}
+          />
+          {hasMany ? (
+            <button type="button" className="project-carousel-arrow project-carousel-arrow-next" aria-label="Следующее фото" onClick={showNext}>
+              ›
+            </button>
+          ) : null}
+        </div>
       </div>
+      {open ? (
+        <ImageOverlay
+          images={images}
+          alt={project.alt}
+          index={index}
+          onIndexChange={setIndex}
+          onClose={closeOverlay}
+        />
+      ) : null}
     </li>
   )
 }

@@ -122,17 +122,140 @@ h2 {
   width: 100%;
   max-width: 800px;
   height: auto;
-  margin-top: 20px;
   border-radius: 6px;
   border: 1px solid #e0e0e0;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   display: block;
-  transition: transform 0.1s ease-out;
-  transform-style: preserve-3d;
+  cursor: zoom-in;
 }
 
 .project-image-wrapper {
   margin-top: 15px;
+}
+
+.project-image-frame {
+  position: relative;
+  max-width: 800px;
+  margin-top: 20px;
+}
+
+.project-carousel-arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  width: 36px;
+  height: 36px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(26, 26, 26, 0.72);
+  color: #ffffff;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.project-carousel-arrow-prev {
+  left: 10px;
+}
+
+.project-carousel-arrow-next {
+  right: 10px;
+}
+
+.image-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.82);
+}
+
+.image-overlay-picture {
+  width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  display: block;
+}
+
+.image-overlay-close {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 22;
+  width: 40px;
+  height: 40px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.image-overlay-nav {
+  display: contents;
+}
+
+.image-overlay-arrow {
+  position: fixed;
+  top: 50%;
+  z-index: 21;
+  width: 48px;
+  height: 48px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  font-size: 36px;
+  line-height: 1;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.image-overlay-nav .image-overlay-arrow:first-child {
+  left: 16px;
+}
+
+.image-overlay-nav .image-overlay-arrow:last-child {
+  right: 16px;
+}
+
+@media (max-width: 720px) {
+  .image-overlay {
+    flex-direction: column;
+  }
+
+  .image-overlay-picture {
+    width: 100%;
+    max-height: calc(100vh - 88px);
+  }
+
+  .image-overlay-nav {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  .image-overlay-arrow,
+  .image-overlay-nav .image-overlay-arrow:first-child,
+  .image-overlay-nav .image-overlay-arrow:last-child {
+    position: static;
+    top: auto;
+    left: auto;
+    right: auto;
+    transform: none;
+  }
 }
 
 .projects-filter {
