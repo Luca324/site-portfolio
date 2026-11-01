@@ -1,0 +1,240 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  line-height: 1.6;
+  color: #2c3e50;
+  background-color: #ffffff;
+  padding: 0;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 60px 20px;
+}
+
+header {
+  text-align: center;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  margin-bottom: 30px;
+}
+
+h1 {
+  font-size: 36px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.title {
+  color: #1a1a1a;
+}
+
+.subtitle {
+  font-size: 18px;
+  color: #555;
+  font-weight: 400;
+}
+
+.profile-photo {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 20px;
+  display: block;
+  /* border: 3px solid #e0e0e0; */
+}
+
+section {
+  margin-bottom: 50px;
+}
+
+h2 {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 25px;
+  color: #1a1a1a;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.projects-list {
+  list-style: none;
+}
+
+.project-item {
+  margin-bottom: 30px;
+  padding-bottom: 25px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.project-item:last-child {
+  border-bottom: none;
+}
+
+.project-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #1a1a1a;
+}
+
+.project-title a {
+  color: #2563eb;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.project-title a:hover {
+  color: #1e40af;
+  text-decoration: underline;
+}
+
+.project-github-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 6px;
+  vertical-align: text-bottom;
+}
+
+.project-description {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.7;
+}
+
+.project-description a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.project-description a:hover {
+  text-decoration: underline;
+}
+
+.project-image {
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+  margin-top: 20px;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  display: block;
+  transition: transform 0.1s ease-out;
+  transform-style: preserve-3d;
+}
+
+.project-image-wrapper {
+  margin-top: 15px;
+}
+
+.projects-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: #555;
+}
+
+.projects-filter select {
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: 1px solid #d0d0d0;
+  background-color: #ffffff;
+  font-size: 14px;
+}
+
+.project-date {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #777;
+}
+
+.contacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.contact-item {
+  font-size: 16px;
+}
+
+.contact-item a {
+  color: #2563eb;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.contact-item a:hover {
+  color: #1e40af;
+  text-decoration: underline;
+}
+
+.resume-link {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 12px 24px;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.resume-link:hover {
+  background-color: #333;
+}
+
+footer {
+  margin-top: 60px;
+  padding-top: 30px;
+  border-top: 2px solid #e0e0e0;
+  text-align: center;
+  color: #888;
+  font-size: 14px;
+}
+
+footer a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  .title {
+    color: #1a1a1a;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 40px 15px;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
+  h2 {
+    font-size: 24px;
+  }
+
+  .project-title {
+    font-size: 18px;
+  }
+
+  .profile-photo {
+    width: 120px;
+    height: 120px;
+  }
+}
