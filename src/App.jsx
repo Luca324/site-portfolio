@@ -1,7 +1,7 @@
-import Header from './components/Header.jsx'
-import Contacts from './components/Contacts.jsx'
-import Projects from './components/Projects.jsx'
-import Footer from './components/Footer.jsx'
+import Header from './components/Header'
+import Contacts from './components/Contacts'
+import Projects from './components/Projects'
+import Footer from './components/Footer'
 import css from './App.module.css'
 
 export default function App() {

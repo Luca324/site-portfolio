@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react'
-import { assetUrl } from '../assetUrl.js'
-import { shiftIndex, useCarouselFrameHeight } from '../utils/carousel.js'
-import ArrowIcon from './ArrowIcon.jsx'
-import ImageOverlay from './ImageOverlay.jsx'
+import { assetUrl } from '../../assetUrl.js'
+import { shiftIndex, useCarouselFrameHeight } from '../../utils/carousel.js'
+import ArrowIcon from '../ArrowIcon'
+import ImageOverlay from '../ImageOverlay'
 import css from './ProjectCard.module.css'
 
 const GITHUB_ICON = 'GitHub_Invertocat_Black_Clearspace.svg'

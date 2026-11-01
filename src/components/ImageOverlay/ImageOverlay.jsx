@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
-import { assetUrl } from '../assetUrl.js'
-import { bindOverlayControls, shiftIndex, stopAndRun } from '../utils/carousel.js'
-import ArrowIcon from './ArrowIcon.jsx'
+import { assetUrl } from '../../assetUrl.js'
+import { bindOverlayControls, shiftIndex, stopAndRun } from '../../utils/carousel.js'
+import ArrowIcon from '../ArrowIcon'
 import css from './ImageOverlay.module.css'
 
 export default function ImageOverlay({ images, alt, index, onIndexChange, onClose }) {

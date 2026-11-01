@@ -1,4 +1,4 @@
-import { assetUrl } from '../assetUrl.js'
+import { assetUrl } from '../../assetUrl.js'
 import css from './Header.module.css'
 
 export default function Header() {
